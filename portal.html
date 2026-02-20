@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Member Portal — Forever Family</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <style>
+        :root {
+            --bg: #0d0d0d;
+            --text: #F5F2EB;
+            --gold: #D4AF37;
+            --stone: #2A2A2A;
+        }
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+        h1, h2, h3, h4, .font-condensed {
+            font-family: 'Oswald', sans-serif;
+            text-transform: uppercase;
+            line-height: 1.1;
+        }
+        .bg-gold { background-color: var(--gold); }
+        .text-gold { color: var(--gold); }
+        .border-gold { border-color: var(--gold); }
+        .border-stone { border-color: var(--stone); }
+        .bg-stone-custom { background-color: var(--stone); }
+
+        .grain-overlay {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            pointer-events: none; z-index: 9999; opacity: 0.05;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+
+        /* Tier badge colors */
+        .badge-bronze { border-color: #cd7f32; color: #cd7f32; }
+        .badge-silver { border-color: #c0c0c0; color: #c0c0c0; }
+        .badge-gold { border-color: var(--gold); color: var(--gold); }
+        .badge-platinum { border-color: #e5e4e2; color: #e5e4e2; }
+
+        /* Content lock overlay */
+        .locked-content {
+            position: relative;
+        }
+        .locked-content::after {
+            content: 'UPGRADE TO UNLOCK';
+            position: absolute; inset: 0;
+            background: rgba(13,13,13,0.92);
+            display: flex; align-items: center; justify-content: center;
+            font-family: 'Oswald', sans-serif;
+            font-size: 0.75rem;
+            letter-spacing: 0.2em;
+            color: var(--stone);
+            border: 1px solid var(--stone);
+            display: flex; align-items: center; justify-content: center;
+        }
+
+        .content-block {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        /* Pulse dot for live/active items */
+        .pulse-dot {
+            display: inline-block;
+            width: 8px; height: 8px;
+            border-radius: 50%;
+            background-color: var(--gold);
+            animation: pulseDot 2s ease-in-out infinite;
+        }
+        @keyframes pulseDot {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.4; transform: scale(0.6); }
+        }
+
+        input, textarea, select {
+            background: transparent;
+        }
+
+        /* Login screen */
+        #login-screen {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        #dashboard {
+            display: none;
+        }
+    </style>
+</head>
+<body class="relative">
+
+    <div class="grain-overlay"></div>
+
+    <!-- Nav -->
+    <nav class="fixed top-0 left-0 w-full px-6 py-4 z-50 flex justify-between items-center border-b border-stone bg-[#0d0d0d] bg-opacity-95">
+        <a href="index.html" class="font-condensed text-xl tracking-widest hover:text-gold transition-colors">← FOREVER FAMILY</a>
+        <div class="flex items-center gap-4">
+            <div id="nav-tier-badge" class="hidden text-xs tracking-widest uppercase border px-3 py-1 badge-bronze">BRONZE</div>
+            <button id="logout-btn" class="hidden text-xs tracking-widest uppercase text-stone hover:text-white transition-colors">LOG OUT</button>
+        </div>
+    </nav>
+
+    <!-- ── LOGIN SCREEN ─────────────────────────────────────────────────────── -->
+    <div id="login-screen" class="px-6 pt-20">
+        <div id="login-panel" class="w-full max-w-md mx-auto bg-[#111] border border-gold p-8 md:p-12 relative">
+            <div class="absolute top-0 left-0 w-6 h-6 border-t-2 border-l-2 border-gold m-3 pointer-events-none"></div>
+            <div class="absolute top-0 right-0 w-6 h-6 border-t-2 border-r-2 border-gold m-3 pointer-events-none"></div>
+            <div class="absolute bottom-0 left-0 w-6 h-6 border-b-2 border-l-2 border-gold m-3 pointer-events-none"></div>
+            <div class="absolute bottom-0 right-0 w-6 h-6 border-b-2 border-r-2 border-gold m-3 pointer-events-none"></div>
+
+            <div class="text-xs text-gold tracking-widest uppercase mb-2">MEMBER ACCESS</div>
+            <h1 class="font-condensed text-4xl mb-2">MEMBER <span class="text-gold">PORTAL</span></h1>
+            <p class="text-gray-400 text-sm mb-8">Enter your email and the access code from your welcome email. New member? <a href="index.html#sec12" class="text-gold hover:text-white transition-colors">Join the movement.</a></p>
+
+            <form id="login-form" class="space-y-6">
+                <div class="relative">
+                    <input type="email" id="login-email" required class="w-full bg-transparent border-b border-stone py-3 text-white focus:outline-none focus:border-gold transition-colors peer" placeholder=" ">
+                    <label for="login-email" class="absolute left-0 top-3 text-stone uppercase tracking-widest text-xs transition-all peer-focus:-top-4 peer-focus:text-gold peer-focus:text-[10px] peer-not-placeholder-shown:-top-4 peer-not-placeholder-shown:text-gold peer-not-placeholder-shown:text-[10px]">Email Address</label>
+                </div>
+                <div class="relative">
+                    <input type="text" id="login-code" required placeholder=" " autocomplete="off"
+                           class="w-full bg-transparent border-b border-stone py-3 text-white focus:outline-none focus:border-gold transition-colors peer uppercase tracking-widest font-condensed text-xl">
+                    <label for="login-code" class="absolute left-0 top-3 text-stone uppercase tracking-widest text-xs transition-all peer-focus:-top-4 peer-focus:text-gold peer-focus:text-[10px] peer-not-placeholder-shown:-top-4 peer-not-placeholder-shown:text-gold peer-not-placeholder-shown:text-[10px]">Access Code</label>
+                </div>
+                <div id="login-error" class="hidden text-xs text-red-400 tracking-widest uppercase py-1">Invalid access code. Check your welcome email.</div>
+                <button type="submit" class="w-full py-4 bg-gold text-[#0d0d0d] font-condensed text-xl tracking-widest hover:bg-white transition-colors duration-300 login-btn disabled:opacity-60">
+                    <span class="login-btn-text">ACCESS PORTAL</span>
+                    <span class="login-btn-loading hidden">VERIFYING...</span>
+                </button>
+            </form>
+
+            <p class="mt-6 text-xs text-stone text-center tracking-widest">
+                Demo codes: FF-BRONZE-2025 · FF-SILVER-2025 · FF-GOLD-2025 · FF-PLATINUM-2025
+            </p>
+        </div>
+    </div>
+
+    <!-- ── DASHBOARD ─────────────────────────────────────────────────────────── -->
+    <div id="dashboard" class="pt-20">
+
+        <!-- Header Banner -->
+        <div class="border-b border-stone px-6 md:px-12 py-12 bg-[#0a0a0a]">
+            <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
+                <div>
+                    <div class="text-xs text-stone tracking-widest uppercase mb-3">WELCOME BACK</div>
+                    <h1 class="font-condensed text-5xl md:text-7xl">YOUR <span class="text-gold" id="dash-tier-name">BRONZE</span> PORTAL</h1>
+                    <p class="text-gray-400 mt-3 text-sm" id="dash-email-display">member@email.com</p>
+                </div>
+                <div class="text-right">
+                    <div class="text-xs text-stone tracking-widest uppercase mb-1">TIER STATUS</div>
+                    <div id="dash-tier-badge" class="inline-block font-condensed text-2xl border px-4 py-2 badge-bronze">BRONZE — SUPPORTER</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Stats Bar -->
+        <div class="border-b border-stone bg-[#111] px-6 md:px-12 py-6">
+            <div class="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+                <div>
+                    <div class="font-condensed text-3xl text-white">450+</div>
+                    <div class="text-xs text-stone tracking-widest uppercase mt-1">Lives Reached</div>
+                </div>
+                <div>
+                    <div class="font-condensed text-3xl text-white">1,200</div>
+                    <div class="text-xs text-stone tracking-widest uppercase mt-1">Patrol Hours</div>
+                </div>
+                <div>
+                    <div class="font-condensed text-3xl text-gold" id="stat-next-session">TBC</div>
+                    <div class="text-xs text-stone tracking-widest uppercase mt-1">Next FFCA Session</div>
+                </div>
+                <div>
+                    <div class="font-condensed text-3xl text-white" id="stat-member-since">2025</div>
+                    <div class="text-xs text-stone tracking-widest uppercase mt-1">Member Since</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ── MAIN CONTENT PANELS ──────────────────────────────────────────── -->
+        <div class="max-w-7xl mx-auto px-6 md:px-12 py-16 space-y-12">
+
+            <!-- BRONZE: Session Updates (all tiers) -->
+            <div class="content-block" data-min-tier="bronze">
+                <div class="flex items-center gap-3 mb-6">
+                    <span class="pulse-dot"></span>
+                    <div class="text-xs text-gold tracking-widest uppercase">LATEST UPDATES</div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="bg-[#111] border border-stone p-6 hover:border-gold transition-colors duration-300">
+                        <div class="text-xs text-stone tracking-widest uppercase mb-3">FFCA SESSION — MONTHLY</div>
+                        <h3 class="font-condensed text-2xl mb-3">FEBRUARY SESSION COMPLETED</h3>
+                        <p class="text-gray-400 text-sm">This month's FFCA session covered Emotional Intelligence (Syllabus 4) and concluded with peer-assessed scenarios. 14 members attended. Next session date to be confirmed.</p>
+                        <div class="mt-4 text-xs text-gold tracking-widest uppercase">Read Summary →</div>
+                    </div>
+                    <div class="bg-[#111] border border-stone p-6 hover:border-gold transition-colors duration-300">
+                        <div class="text-xs text-stone tracking-widest uppercase mb-3">COMMUNITY NOTICE</div>
+                        <h3 class="font-condensed text-2xl mb-3">NEW CERTIFICATION COHORT OPEN</h3>
+                        <p class="text-gray-400 text-sm">Applications are now open for the next PIA certification cohort. Bronze members can nominate a candidate. Silver and above receive early access applications.</p>
+                        <div class="mt-4 text-xs text-gold tracking-widest uppercase">Apply Now →</div>
+                    </div>
+                    <div class="bg-[#111] border border-stone p-6 hover:border-gold transition-colors duration-300">
+                        <div class="text-xs text-stone tracking-widest uppercase mb-3">ORGANISATION UPDATE</div>
+                        <h3 class="font-condensed text-2xl mb-3">TWO NEW STEPPERS CERTIFIED</h3>
+                        <p class="text-gray-400 text-sm">Forever Family is proud to welcome two newly Certified Steppers to the Steppers Only Squad. They passed all six PIA syllabuses with distinction.</p>
+                        <div class="mt-4 text-xs text-gold tracking-widest uppercase">View Announcement →</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- G-LINE ACCESS (Bronze and above) -->
+            <div class="content-block" data-min-tier="bronze">
+                <div class="text-xs text-gold tracking-widest uppercase mb-6 border-b border-stone pb-4">G-LINE REFERRAL ACCESS</div>
+                <div class="bg-[#111] border border-stone p-8 md:p-12">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
+                        <div>
+                            <h2 class="font-condensed text-4xl mb-4">SUBMIT A <span class="text-gold">REFERRAL</span></h2>
+                            <p class="text-gray-400 mb-6">As a member, you have access to the G-Line — our confidential referral system. If you know someone in danger or at risk, submit their details and the SOS team will respond within 24 hours.</p>
+                            <p class="text-xs text-stone tracking-widest uppercase">For immediate life threats — call 999 first.</p>
+                        </div>
+                        <form id="portal-gline-form" class="space-y-5">
+                            <div class="relative">
+                                <input type="text" id="pg-who" required class="w-full bg-transparent border-b border-stone py-3 text-white focus:outline-none focus:border-gold transition-colors peer" placeholder=" ">
+                                <label for="pg-who" class="absolute left-0 top-3 text-stone uppercase tracking-widest text-xs transition-all peer-focus:-top-4 peer-focus:text-gold peer-focus:text-[10px] peer-not-placeholder-shown:-top-4 peer-not-placeholder-shown:text-gold peer-not-placeholder-shown:text-[10px]">Who Needs Help</label>
+                            </div>
+                            <div class="relative">
+                                <select id="pg-urgency" required class="w-full bg-transparent border-b border-stone py-3 text-stone uppercase tracking-widest text-xs focus:outline-none focus:border-gold focus:text-white transition-colors appearance-none rounded-none">
+                                    <option value="" disabled selected>Urgency Level</option>
+                                    <option value="immediate" class="bg-[#111] text-white">Immediate</option>
+                                    <option value="urgent" class="bg-[#111] text-white">Urgent — 24 hours</option>
+                                    <option value="ongoing" class="bg-[#111] text-white">Ongoing Situation</option>
+                                    <option value="preventive" class="bg-[#111] text-white">Preventive</option>
+                                </select>
+                            </div>
+                            <div class="relative">
+                                <textarea id="pg-situation" rows="3" required class="w-full bg-transparent border-b border-stone py-3 text-white focus:outline-none focus:border-gold transition-colors peer resize-none" placeholder=" "></textarea>
+                                <label for="pg-situation" class="absolute left-0 top-3 text-stone uppercase tracking-widest text-xs transition-all peer-focus:-top-4 peer-focus:text-gold peer-focus:text-[10px] peer-not-placeholder-shown:-top-4 peer-not-placeholder-shown:text-gold peer-not-placeholder-shown:text-[10px]">Describe the Situation</label>
+                            </div>
+                            <div id="pg-success" class="hidden text-xs text-gold tracking-widest uppercase py-2">Referral submitted. We will respond within 24 hours.</div>
+                            <button type="submit" class="w-full py-4 bg-gold text-[#0d0d0d] font-condensed text-xl tracking-widest hover:bg-white transition-colors duration-300">SUBMIT REFERRAL</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SILVER+: Operation Updates -->
+            <div class="content-block" data-min-tier="silver">
+                <div class="text-xs text-gold tracking-widest uppercase mb-6 border-b border-stone pb-4">SOS OPERATION UPDATES <span class="text-stone ml-2">— SILVER & ABOVE</span></div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-[#111] border border-stone p-6 hover:border-gold transition-colors duration-300">
+                        <div class="flex justify-between items-start mb-4">
+                            <div class="text-xs text-stone tracking-widest uppercase">OPERATION REPORT</div>
+                            <div class="text-xs text-gold">14 FEB 2026</div>
+                        </div>
+                        <h3 class="font-condensed text-2xl mb-3">FRIDAY NIGHT PATROL — SECTOR 4</h3>
+                        <p class="text-gray-400 text-sm">4-hour patrol. 2 de-escalations. 1 family walkout. 0 arrests. The team remained calm, professional, and effective throughout a tense two-hour situation near the precinct boundary.</p>
+                        <div class="mt-4 h-[2px] w-full bg-stone"><div class="h-full bg-gold w-3/4"></div></div>
+                        <div class="text-xs text-stone mt-2 tracking-widest">Situation resolved — CLOSED</div>
+                    </div>
+                    <div class="bg-[#111] border border-stone p-6 hover:border-gold transition-colors duration-300">
+                        <div class="flex justify-between items-start mb-4">
+                            <div class="text-xs text-stone tracking-widest uppercase">INTERVENTION REPORT</div>
+                            <div class="text-xs text-gold">08 FEB 2026</div>
+                        </div>
+                        <h3 class="font-condensed text-2xl mb-3">YOUTH CONFLICT — SCHOOL EXIT</h3>
+                        <p class="text-gray-400 text-sm">SOS responded to a G-Line call. A dispute between rival groups outside a secondary school was de-escalated in under 20 minutes. Two young men were referred into FFCA training.</p>
+                        <div class="mt-4 h-[2px] w-full bg-stone"><div class="h-full bg-gold w-full"></div></div>
+                        <div class="text-xs text-gold mt-2 tracking-widest">Referral accepted — ACTIVE</div>
+                    </div>
+                </div>
+                <div class="mt-6 p-4 border border-stone text-xs text-stone tracking-widest uppercase text-center">
+                    SOS Close Friends — Follow our private Instagram: @foreverfamily.sos.closefriends (Silver members receive invite link via email)
+                </div>
+            </div>
+
+            <!-- GOLD+: FFCA WhatsApp + Youth Sponsorship -->
+            <div class="content-block" data-min-tier="gold">
+                <div class="text-xs text-gold tracking-widest uppercase mb-6 border-b border-stone pb-4">FFCA COMMUNITY ACCESS <span class="text-stone ml-2">— GOLD & ABOVE</span></div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="bg-[#111] border border-gold p-6 col-span-1">
+                        <div class="text-xs text-gold tracking-widest uppercase mb-4">FFCA WHATSAPP GROUP</div>
+                        <h3 class="font-condensed text-2xl mb-3">INNER CIRCLE</h3>
+                        <p class="text-gray-400 text-sm mb-6">Real-time behind-the-scenes updates from every FFCA session, patrol, and intervention. Shared by Certified Steppers only.</p>
+                        <button class="text-xs tracking-widest text-gold uppercase border border-gold px-4 py-2 hover:bg-gold hover:text-[#0d0d0d] transition-colors" onclick="alert('Your WhatsApp invite link has been sent to your registered email address.')">REQUEST INVITE LINK</button>
+                    </div>
+                    <div class="bg-[#111] border border-stone p-6 col-span-2">
+                        <div class="text-xs text-gold tracking-widest uppercase mb-4">YOUTH SPONSORSHIP — YOUR IMPACT</div>
+                        <h3 class="font-condensed text-2xl mb-4">THIS MONTH'S COHORT</h3>
+                        <div class="space-y-4">
+                            <div>
+                                <div class="flex justify-between text-xs text-stone tracking-widest uppercase mb-2">
+                                    <span>Sessions Funded by Gold Members</span><span class="text-gold">3 / 3</span>
+                                </div>
+                                <div class="h-[2px] w-full bg-stone"><div class="h-full bg-gold w-full"></div></div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between text-xs text-stone tracking-widest uppercase mb-2">
+                                    <span>Children's Places Sponsored</span><span class="text-gold">12</span>
+                                </div>
+                                <div class="h-[2px] w-full bg-stone"><div class="h-full bg-gold" style="width:80%"></div></div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between text-xs text-stone tracking-widest uppercase mb-2">
+                                    <span>Meals Provided</span><span class="text-gold">36</span>
+                                </div>
+                                <div class="h-[2px] w-full bg-stone"><div class="h-full bg-gold w-full"></div></div>
+                            </div>
+                        </div>
+                        <p class="text-gray-400 text-sm mt-6">Your Gold membership directly sponsored 3 children's access to FFCA training this month — covering all meals, materials, and facilitation costs.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PLATINUM: Classified Section -->
+            <div class="content-block" data-min-tier="platinum">
+                <div class="text-xs text-gold tracking-widest uppercase mb-6 border-b border-gold pb-4">CLASSIFIED ACCESS <span class="text-stone ml-2">— PLATINUM ONLY</span></div>
+                <div class="bg-[#0a0a0a] border-2 border-gold p-8 md:p-12 relative">
+                    <div class="absolute top-4 right-4 text-xs text-stone tracking-widest uppercase">EYES ONLY</div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                        <div>
+                            <h2 class="font-condensed text-4xl mb-6">KEYS TO THE <span class="text-gold">CITY</span></h2>
+                            <div class="space-y-4">
+                                <div class="border border-stone p-4 hover:border-gold transition-colors">
+                                    <div class="text-xs text-gold tracking-widest uppercase mb-2">PRIVATE DOCUMENT</div>
+                                    <h4 class="font-condensed text-xl mb-1">SOS OPERATIONAL FRAMEWORK</h4>
+                                    <p class="text-gray-400 text-xs">Full operational guidelines for active SOS missions. Not for distribution.</p>
+                                    <button class="mt-3 text-xs text-gold tracking-widest uppercase hover:text-white transition-colors" onclick="alert('Document access: Your secure download link has been sent to your registered email.')">ACCESS DOCUMENT →</button>
+                                </div>
+                                <div class="border border-stone p-4 hover:border-gold transition-colors">
+                                    <div class="text-xs text-gold tracking-widest uppercase mb-2">PRIVATE DOCUMENT</div>
+                                    <h4 class="font-condensed text-xl mb-1">FFCA CURRICULUM — FULL SYLLABUS</h4>
+                                    <p class="text-gray-400 text-xs">Complete six-syllabus training curriculum as approved by PIA. Platinum members only.</p>
+                                    <button class="mt-3 text-xs text-gold tracking-widest uppercase hover:text-white transition-colors" onclick="alert('Document access: Your secure download link has been sent to your registered email.')">ACCESS DOCUMENT →</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <h2 class="font-condensed text-4xl mb-6">DIRECT <span class="text-gold">CONTACT</span></h2>
+                            <p class="text-gray-400 text-sm mb-6">As a Platinum member, you have direct access to SOS leadership — not just the G-Line, but a private channel reserved for City Protectors only.</p>
+                            <div class="border border-gold p-6">
+                                <div class="text-xs text-gold tracking-widest uppercase mb-3">PLATINUM HOTLINE</div>
+                                <p class="text-gray-400 text-sm mb-4">Your dedicated point of contact for high-priority referrals, classified briefings, and operational matters. Available 24/7.</p>
+                                <button class="w-full py-3 bg-gold text-[#0d0d0d] font-condensed text-lg tracking-widest hover:bg-white transition-colors" onclick="alert('Contact details sent to your registered email. Keep this information confidential.')">REVEAL CONTACT DETAILS</button>
+                            </div>
+                            <div class="mt-6 border border-stone p-4">
+                                <div class="text-xs text-gold tracking-widest uppercase mb-2">CLASSIFIED BRIEFING — FEB 2026</div>
+                                <p class="text-gray-400 text-xs">Monthly operational briefing document available. Covers active sectors, known threat profiles, and planned interventions for the coming 30 days.</p>
+                                <button class="mt-3 text-xs text-gold tracking-widest uppercase hover:text-white transition-colors" onclick="alert('Briefing document sent to your registered email.')">ACCESS BRIEFING →</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- UPGRADE CTA (shown when locked content exists) -->
+            <div id="upgrade-cta" class="hidden content-block border border-stone p-8 text-center">
+                <div class="text-xs text-stone tracking-widest uppercase mb-4">WANT MORE ACCESS?</div>
+                <h2 class="font-condensed text-4xl mb-4">UPGRADE YOUR <span class="text-gold">TIER</span></h2>
+                <p class="text-gray-400 mb-8 max-w-lg mx-auto">Higher tiers unlock operation reports, real-time updates, the FFCA WhatsApp group, classified documents, and direct contact with SOS leadership.</p>
+                <a href="index.html#sec-tiers" class="inline-block px-10 py-4 bg-gold text-[#0d0d0d] font-condensed text-xl tracking-widest hover:bg-white transition-colors duration-300">VIEW ALL TIERS</a>
+            </div>
+
+        </div>
+
+        <!-- Footer -->
+        <footer class="border-t border-stone px-6 md:px-12 py-12 bg-[#050505] text-center">
+            <div class="font-condensed text-3xl text-stone opacity-30 mb-4">FOREVER MEANS WE STAY.</div>
+            <div class="text-xs text-stone tracking-widest uppercase">PIA — Public &nbsp;|&nbsp; FFCA — Confidential &nbsp;|&nbsp; SOS — Classified</div>
+        </footer>
+
+    </div><!-- end dashboard -->
+
+    <script>
+    (function() {
+        gsap.registerPlugin(ScrollTrigger);
+
+        const TIER_ORDER = ['bronze', 'silver', 'gold', 'platinum'];
+        const TIER_LABELS = {
+            bronze: 'BRONZE — SUPPORTER',
+            silver: 'SILVER — GUARDIAN',
+            gold: 'GOLD — YOUTH CHAMPION',
+            platinum: 'PLATINUM — CITY PROTECTOR'
+        };
+        const BADGE_CLASSES = {
+            bronze: 'badge-bronze',
+            silver: 'badge-silver',
+            gold: 'badge-gold',
+            platinum: 'badge-platinum'
+        };
+
+        function tierIndex(tier) {
+            return TIER_ORDER.indexOf(tier);
+        }
+
+        // ── Session handling ────────────────────────────────────────────────
+        function getSession() {
+            try {
+                const raw = localStorage.getItem('ff_session');
+                if (!raw) return null;
+                const sess = JSON.parse(atob(raw));
+                if (Date.now() > sess.exp) { localStorage.removeItem('ff_session'); return null; }
+                return sess;
+            } catch(_) { return null; }
+        }
+
+        function saveSession(data) {
+            const payload = { email: data.email, tier: data.tier, exp: Date.now() + 86400000 };
+            localStorage.setItem('ff_session', btoa(JSON.stringify(payload)));
+        }
+
+        function clearSession() {
+            localStorage.removeItem('ff_session');
+        }
+
+        // ── Bootstrap ───────────────────────────────────────────────────────
+        const session = getSession();
+        if (session) {
+            showDashboard(session.email, session.tier);
+        }
+
+        // ── Login form ──────────────────────────────────────────────────────
+        document.getElementById('login-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = e.target.querySelector('.login-btn');
+            const btnText = btn.querySelector('.login-btn-text');
+            const btnLoading = btn.querySelector('.login-btn-loading');
+            const errorEl = document.getElementById('login-error');
+
+            btnText.classList.add('hidden');
+            btnLoading.classList.remove('hidden');
+            btn.disabled = true;
+            errorEl.classList.add('hidden');
+
+            const email = document.getElementById('login-email').value.trim();
+            const code = document.getElementById('login-code').value.trim();
+
+            let tier = null;
+
+            try {
+                const res = await fetch('/api/portal-login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, code })
+                });
+                const data = await res.json();
+                if (data.success) tier = data.tier;
+            } catch (_) {
+                // Graceful degradation: validate locally if server isn't running
+                const LOCAL_CODES = {
+                    'FF-BRONZE-2025': 'bronze',
+                    'FF-SILVER-2025': 'silver',
+                    'FF-GOLD-2025': 'gold',
+                    'FF-PLATINUM-2025': 'platinum',
+                };
+                tier = LOCAL_CODES[code.toUpperCase()] || null;
+            }
+
+            if (!tier) {
+                errorEl.classList.remove('hidden');
+                btnText.classList.remove('hidden');
+                btnLoading.classList.add('hidden');
+                btn.disabled = false;
+                gsap.fromTo('#login-panel', { x: -10 }, { x: 0, duration: 0.4, ease: 'elastic.out(1, 0.3)',
+                    keyframes: [{ x: -10 }, { x: 10 }, { x: -6 }, { x: 6 }, { x: 0 }]
+                });
+                return;
+            }
+
+            saveSession({ email, tier });
+            showDashboard(email, tier);
+        });
+
+        // ── Logout ──────────────────────────────────────────────────────────
+        document.getElementById('logout-btn').addEventListener('click', () => {
+            clearSession();
+            gsap.to('#dashboard', { opacity: 0, duration: 0.3, onComplete: () => {
+                document.getElementById('dashboard').style.display = 'none';
+                document.getElementById('login-screen').style.display = 'flex';
+                gsap.fromTo('#login-screen', { opacity: 0 }, { opacity: 1, duration: 0.4 });
+            }});
+        });
+
+        // ── Show dashboard ──────────────────────────────────────────────────
+        function showDashboard(email, tier) {
+            // Update UI elements
+            document.getElementById('dash-tier-name').textContent = tier.toUpperCase();
+            document.getElementById('dash-email-display').textContent = email;
+
+            const badgeEl = document.getElementById('dash-tier-badge');
+            badgeEl.textContent = TIER_LABELS[tier];
+            badgeEl.className = 'inline-block font-condensed text-2xl border px-4 py-2 ' + BADGE_CLASSES[tier];
+
+            const navBadge = document.getElementById('nav-tier-badge');
+            navBadge.textContent = tier.toUpperCase();
+            navBadge.className = 'text-xs tracking-widest uppercase border px-3 py-1 ' + BADGE_CLASSES[tier];
+            navBadge.classList.remove('hidden');
+            document.getElementById('logout-btn').classList.remove('hidden');
+
+            // Show/lock content blocks
+            const userTierIndex = tierIndex(tier);
+            let hasLocked = false;
+
+            document.querySelectorAll('.content-block[data-min-tier]').forEach(block => {
+                const minTier = block.getAttribute('data-min-tier');
+                const minTierIndex = tierIndex(minTier);
+                if (userTierIndex >= minTierIndex) {
+                    block.style.display = 'block';
+                } else {
+                    block.style.display = 'none';
+                    hasLocked = true;
+                }
+            });
+
+            if (hasLocked) {
+                document.getElementById('upgrade-cta').classList.remove('hidden');
+                document.getElementById('upgrade-cta').style.display = 'block';
+            }
+
+            // Transition to dashboard
+            document.getElementById('login-screen').style.display = 'none';
+            document.getElementById('dashboard').style.display = 'block';
+
+            // Animate content blocks in
+            gsap.fromTo('#dashboard', { opacity: 0 }, { opacity: 1, duration: 0.5 });
+            gsap.to('.content-block', {
+                opacity: 1, y: 0, duration: 0.8, stagger: 0.12, ease: 'power3.out', delay: 0.2
+            });
+        }
+
+        // ── Portal G-Line form ───────────────────────────────────────────────
+        document.getElementById('portal-gline-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const session = getSession();
+            const payload = {
+                name: session ? session.email : 'Member',
+                referralName: document.getElementById('pg-who').value,
+                relationship: 'Member referral',
+                urgency: document.getElementById('pg-urgency').value,
+                situation: document.getElementById('pg-situation').value,
+            };
+
+            try {
+                await fetch('/api/referral', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+            } catch (_) { /* graceful degradation */ }
+
+            document.getElementById('pg-success').classList.remove('hidden');
+            e.target.reset();
+        });
+
+    })();
+    </script>
+
+</body>
+</html>

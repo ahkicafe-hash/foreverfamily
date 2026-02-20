@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About | FOREVER FAMILY</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+    <style>
+        :root { --bg: #0d0d0d; --text: #F5F2EB; --gold: #D4AF37; --stone: #2A2A2A; }
+        body { background-color: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; overflow-x: hidden; -webkit-font-smoothing: antialiased; }
+        h1, h2, h3, h4, .font-condensed { font-family: 'Oswald', sans-serif; text-transform: uppercase; line-height: 1.1; }
+        .bg-gold { background-color: var(--gold); }
+        .text-gold { color: var(--gold); }
+        .border-gold { border-color: var(--gold); }
+        .bg-stone-custom { background-color: var(--stone); }
+        .border-stone { border-color: var(--stone); }
+        .grain-overlay {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            pointer-events: none; z-index: 9999; opacity: 0.05;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+        img.doc-style { filter: grayscale(80%) contrast(120%) brightness(90%); transition: filter 0.5s ease; }
+        img.doc-style:hover { filter: grayscale(20%) contrast(110%) brightness(100%); }
+    </style>
+</head>
+<body class="relative">
+
+    <div class="grain-overlay"></div>
+
+    <!-- NAV -->
+    <nav class="fixed top-0 left-0 w-full p-6 z-50 flex justify-between items-center mix-blend-difference pointer-events-none">
+        <div class="font-condensed text-2xl tracking-widest pointer-events-auto">
+            <a href="index.html">FOREVER FAMILY</a>
+        </div>
+        <div class="hidden md:flex gap-8 text-sm font-medium tracking-widest uppercase pointer-events-auto">
+            <a href="about.html" class="text-gold">About</a>
+            <a href="programmes.html" class="hover:text-gold transition-colors">Programmes</a>
+            <a href="membership.html" class="hover:text-gold transition-colors">Membership</a>
+            <a href="membership.html#join-form" class="hover:text-gold transition-colors">Join</a>
+            <a href="portal.html" class="hover:text-gold transition-colors border border-stone px-3 py-1 hover:border-gold">Member Portal</a>
+        </div>
+        <button id="mobile-menu-btn" class="flex md:hidden flex-col justify-center items-end gap-[5px] w-8 h-8 pointer-events-auto" aria-label="Open navigation">
+            <span class="ham-line block bg-white h-[1.5px] w-6 origin-center"></span>
+            <span class="ham-line block bg-white h-[1.5px] w-6 origin-center"></span>
+            <span class="ham-line block bg-white h-[1.5px] w-4 origin-center"></span>
+        </button>
+    </nav>
+
+    <!-- MOBILE MENU -->
+    <div id="mobile-menu" class="fixed inset-0 z-[9996] bg-[#0d0d0d] flex flex-col px-8 pt-7 pb-10 pointer-events-none overflow-y-auto" style="opacity:0">
+        <div class="flex justify-between items-center mb-12">
+            <div class="font-condensed text-2xl tracking-widest">FOREVER FAMILY</div>
+            <button id="mobile-menu-close" class="flex flex-col justify-center items-center w-8 h-8" aria-label="Close navigation">
+                <span class="block bg-white h-[1.5px] w-6 origin-center" style="transform:rotate(45deg) translateY(0.75px)"></span>
+                <span class="block bg-white h-[1.5px] w-6 origin-center" style="transform:rotate(-45deg) translateY(-0.75px)"></span>
+            </button>
+        </div>
+        <div class="border-b border-stone mb-6 pb-3">
+            <span class="text-[10px] text-stone tracking-[0.3em] uppercase">Navigation</span>
+        </div>
+        <nav class="flex flex-col flex-grow">
+            <a href="about.html"      class="mob-link font-condensed text-[14vw] text-gold leading-none py-3 border-b border-stone border-opacity-30" style="opacity:0;transform:translateX(-24px)">ABOUT</a>
+            <a href="programmes.html" class="mob-link font-condensed text-[14vw] text-white hover:text-gold transition-colors leading-none py-3 border-b border-stone border-opacity-30" style="opacity:0;transform:translateX(-24px)">PROGRAMMES</a>
+            <a href="membership.html" class="mob-link font-condensed text-[14vw] text-white hover:text-gold transition-colors leading-none py-3 border-b border-stone border-opacity-30" style="opacity:0;transform:translateX(-24px)">MEMBERSHIP</a>
+            <a href="membership.html#join-form" class="mob-link font-condensed text-[14vw] text-gold leading-none py-3" style="opacity:0;transform:translateX(-24px)">JOIN</a>
+        </nav>
+        <div class="border-t border-stone pt-6 mt-6 flex justify-between items-end">
+            <a href="portal.html" class="mob-link text-xs tracking-widest uppercase text-stone hover:text-gold transition-colors" style="opacity:0;transform:translateX(-24px)">Member Portal →</a>
+            <span class="text-[10px] text-stone tracking-widest uppercase opacity-40">PIA · FFCA · SOS</span>
+        </div>
+    </div>
+
+    <!-- PAGE HEADER -->
+    <section class="pt-48 pb-24 px-6 md:px-12 max-w-7xl mx-auto">
+        <div class="reveal-el text-xs text-gold tracking-widest uppercase mb-6 border-b border-stone pb-4 inline-block">ABOUT FOREVER FAMILY</div>
+        <h1 class="reveal-el font-condensed text-[14vw] md:text-[9vw] leading-none text-white mb-8">WHO WE<br><span class="text-gold">ARE.</span></h1>
+        <p class="reveal-el text-lg md:text-xl text-gray-400 max-w-2xl leading-relaxed">Three bodies. One mission. A community-led infrastructure built to protect, train, and respond — in the places and moments others won't.</p>
+    </section>
+
+    <!-- SEC: THE PIPELINE -->
+    <section id="pipeline" class="py-24 px-6 md:px-12 bg-[#0a0a0a] border-t border-stone relative">
+        <div class="max-w-7xl mx-auto">
+            <div class="reveal-el text-xs text-gold tracking-widest uppercase mb-20 border-b border-stone pb-4 inline-block">THE PIPELINE — HOW WE WORK</div>
+
+            <div class="relative">
+                <!-- Vertical connecting line desktop -->
+                <div class="hidden md:block absolute left-1/2 top-0 bottom-0 w-[2px] bg-stone -translate-x-1/2 overflow-hidden">
+                    <div class="pipeline-draw w-full h-full bg-gold origin-top" style="transform: scaleY(0)"></div>
+                </div>
+
+                <div class="flex flex-col relative">
+
+                    <!-- PIA -->
+                    <div class="pipe-step flex flex-col md:flex-row items-start md:items-center gap-8 md:gap-0 pb-28 opacity-0 translate-y-8">
+                        <div class="w-full md:w-1/2 md:pr-24 md:text-right">
+                            <div class="text-[10px] tracking-widest text-gold uppercase mb-2">STAGE 01</div>
+                            <h3 class="font-condensed text-5xl md:text-6xl mb-4">PIA</h3>
+                            <p class="text-gray-400 text-sm leading-relaxed max-w-md ml-auto">The Public Infrastructure Authority is the standards body of Forever Family. PIA sets the code of conduct, certification criteria, and the 12-Point assessment framework that every Stepper must complete before deployment.</p>
+                            <div class="mt-6 flex gap-3 md:justify-end flex-wrap">
+                                <span class="text-[10px] tracking-widest border border-stone px-3 py-1 text-stone">STANDARDS</span>
+                                <span class="text-[10px] tracking-widest border border-stone px-3 py-1 text-stone">CERTIFICATION</span>
+                                <span class="text-[10px] tracking-widest border border-stone px-3 py-1 text-stone">ACCOUNTABILITY</span>
+                            </div>
+                        </div>
+                        <div class="hidden md:flex w-0 items-center justify-center relative z-10">
+                            <div class="w-5 h-5 border-2 border-gold bg-[#0a0a0a] rounded-full flex items-center justify-center">
+                                <div class="w-2 h-2 bg-gold rounded-full"></div>
+                            </div>
+                        </div>
+                        <div class="w-full md:w-1/2 md:pl-24">
+                            <div class="bg-[#111] border border-stone p-6 relative">
+                                <div class="absolute top-0 left-0 w-6 h-6 border-t-2 border-l-2 border-gold m-3 pointer-events-none"></div>
+                                <div class="text-sm text-gold font-condensed mb-3 tracking-widest">WHAT THIS MEANS FOR YOU</div>
+                                <p class="text-xs text-gray-400 leading-relaxed">Every member and Stepper operates under PIA-certified standards. When you join Forever Family, you're joining an organisation with a documented code — not a loose collective.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- FFCA -->
+                    <div class="pipe-step flex flex-col md:flex-row-reverse items-start md:items-center gap-8 md:gap-0 pb-28 opacity-0 translate-y-8">
+                        <div class="w-full md:w-1/2 md:pl-24">
+                            <div class="text-[10px] tracking-widest text-gold uppercase mb-2">STAGE 02</div>
+                            <h3 class="font-condensed text-5xl md:text-6xl mb-4">FFCA</h3>
+                            <p class="text-gray-400 text-sm leading-relaxed max-w-md">The Forever Family Community Academy is where the training happens. FFCA delivers the 12-Point Programme — 60 assessments across 12 disciplines — turning community members into certified Steppers.</p>
+                            <div class="mt-6 flex gap-3 flex-wrap">
+                                <span class="text-[10px] tracking-widest border border-stone px-3 py-1 text-stone">TRAINING</span>
+                                <span class="text-[10px] tracking-widest border border-stone px-3 py-1 text-stone">12-POINT PROGRAMME</span>
+                                <span class="text-[10px] tracking-widest border border-stone px-3 py-1 text-stone">60 ASSESSMENTS</span>
+                            </div>
+                        </div>
+                        <div class="hidden md:flex w-0 items-center justify-center relative z-10">
+                            <div class="w-5 h-5 border-2 border-gold bg-[#0a0a0a] rounded-full flex items-center justify-center">
+                                <div class="w-2 h-2 bg-gold rounded-full"></div>
+                            </div>
+                        </div>
+                        <div class="w-full md:w-1/2 md:pr-24 md:text-right">
+                            <div class="bg-[#111] border border-stone p-6 relative">
+                                <div class="absolute top-0 right-0 w-6 h-6 border-t-2 border-r-2 border-gold m-3 pointer-events-none"></div>
+                                <div class="text-sm text-gold font-condensed mb-3 tracking-widest">OPEN MONTHLY</div>
+                                <p class="text-xs text-gray-400 leading-relaxed">FFCA sessions run monthly and are open to Bronze members and above. Structured, practical, and held in secure community venues. Theory meets street reality.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SOS -->
+                    <div class="pipe-step flex flex-col md:flex-row items-start md:items-center gap-8 md:gap-0 pb-28 opacity-0 translate-y-8">
+                        <div class="w-full md:w-1/2 md:pr-24 md:text-right">
+                            <div class="text-[10px] tracking-widest text-gold uppercase mb-2">STAGE 03</div>
+                            <h3 class="font-condensed text-5xl md:text-6xl mb-4">SOS</h3>
+                            <p class="text-gray-400 text-sm leading-relaxed max-w-md ml-auto">The Safe Operations Squad is the deployment arm. Certified Steppers conduct community safety patrols, crisis interventions, and G-Line responses in active operational zones across the UK.</p>
+                            <div class="mt-6 flex gap-3 md:justify-end flex-wrap">
+                                <span class="text-[10px] tracking-widest border border-stone px-3 py-1 text-stone">DEPLOYMENT</span>
+                                <span class="text-[10px] tracking-widest border border-stone px-3 py-1 text-stone">CRISIS RESPONSE</span>
+                                <span class="text-[10px] tracking-widest border border-stone px-3 py-1 text-stone">PATROLS</span>
+                            </div>
+                        </div>
+                        <div class="hidden md:flex w-0 items-center justify-center relative z-10">
+                            <div class="w-5 h-5 border-2 border-gold bg-[#0a0a0a] rounded-full flex items-center justify-center">
+                                <div class="w-2 h-2 bg-gold rounded-full"></div>
+                            </div>
+                        </div>
+                        <div class="w-full md:w-1/2 md:pl-24">
+                            <div class="bg-[#111] border border-stone p-6 relative">
+                                <div class="absolute top-0 left-0 w-6 h-6 border-t-2 border-l-2 border-gold m-3 pointer-events-none"></div>
+                                <div class="text-sm text-gold font-condensed mb-3 tracking-widest">CLASSIFIED OPERATIONS</div>
+                                <p class="text-xs text-gray-400 leading-relaxed">SOS operations are disclosed to Silver members and above. Not everything we do can be public — the communities we protect come first, always.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- COMMUNITY -->
+                    <div class="pipe-step flex flex-col md:flex-row-reverse items-start md:items-center gap-8 md:gap-0 opacity-0 translate-y-8">
+                        <div class="w-full md:w-1/2 md:pl-24">
+                            <div class="text-[10px] tracking-widest text-gold uppercase mb-2">STAGE 04</div>
+                            <h3 class="font-condensed text-5xl md:text-6xl mb-4">COMMUNITY</h3>
+                            <p class="text-gray-400 text-sm leading-relaxed max-w-md">This is where the mission lands. Every session attended, every patrol logged, every G-Line response answered — it all flows back here. Safer streets. Stronger young people. Families kept intact.</p>
+                            <div class="mt-6 flex gap-3 flex-wrap">
+                                <span class="text-[10px] tracking-widest border border-gold px-3 py-1 text-gold">THE GOAL</span>
+                            </div>
+                        </div>
+                        <div class="hidden md:flex w-0 items-center justify-center relative z-10">
+                            <div class="w-6 h-6 bg-gold rounded-full flex items-center justify-center">
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#0d0d0d" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                            </div>
+                        </div>
+                        <div class="hidden md:block w-full md:w-1/2 md:pr-24"></div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SEC: STORIES FROM THE FIELD -->
+    <section id="stories" class="py-24 border-t border-stone">
+        <div class="px-6 md:px-12 max-w-7xl mx-auto mb-16">
+            <div class="reveal-el text-xs text-gold tracking-widest uppercase mb-6 border-b border-stone pb-4 inline-block">FIELD REPORTS</div>
+            <h2 class="reveal-el font-condensed text-5xl md:text-7xl">STORIES FROM<br><span class="text-gold">THE GROUND.</span></h2>
+        </div>
+
+        <div class="max-w-7xl mx-auto px-6 md:px-12 grid grid-cols-1 md:grid-cols-3 gap-0 border-t border-l border-stone">
+
+            <!-- Story 1 -->
+            <div class="story-card border-r border-b border-stone p-8 md:p-10 opacity-0">
+                <div class="text-xs text-gold tracking-widest uppercase mb-6">— BIRMINGHAM, 2024</div>
+                <div class="w-8 h-[1px] bg-gold mb-8"></div>
+                <blockquote class="font-condensed text-2xl md:text-3xl leading-tight mb-6">"I was running with people I knew were going to get me killed. FFCA gave me a structure and a reason to step away."</blockquote>
+                <p class="text-gray-400 text-sm leading-relaxed mb-8">Darius came to us at 19 — already known to police, already embedded in a network of violence. Three months of FFCA training later, he was mentoring others. He is now a certified Stepper.</p>
+                <div class="border-t border-stone pt-6">
+                    <div class="text-xs tracking-widest text-stone uppercase">DARIUS, 19</div>
+                    <div class="text-[10px] tracking-widest text-gold uppercase mt-1">CERTIFIED STEPPER — FFCA 2024</div>
+                </div>
+            </div>
+
+            <!-- Story 2 -->
+            <div class="story-card border-r border-b border-stone p-8 md:p-10 opacity-0">
+                <div class="text-xs text-gold tracking-widest uppercase mb-6">— SHEFFIELD, 2024</div>
+                <div class="w-8 h-[1px] bg-gold mb-8"></div>
+                <blockquote class="font-condensed text-2xl md:text-3xl leading-tight mb-6">"Within four hours of the call, two Steppers were at our door. I didn't know organisations like this existed. I thought we were alone."</blockquote>
+                <p class="text-gray-400 text-sm leading-relaxed mb-8">A mother contacted the G-Line after identifying signs of exploitation in her teenage son. Our SOS team conducted a welfare check, worked with the family, and connected them with specialist safeguarding services.</p>
+                <div class="border-t border-stone pt-6">
+                    <div class="text-xs tracking-widest text-stone uppercase">ANONYMOUS FAMILY</div>
+                    <div class="text-[10px] tracking-widest text-gold uppercase mt-1">G-LINE RESPONSE — SHEFFIELD</div>
+                </div>
+            </div>
+
+            <!-- Story 3 -->
+            <div class="story-card border-r border-b border-stone p-8 md:p-10 opacity-0">
+                <div class="text-xs text-gold tracking-widest uppercase mb-6">— NORTH LONDON, 2024</div>
+                <div class="w-8 h-[1px] bg-gold mb-8"></div>
+                <blockquote class="font-condensed text-2xl md:text-3xl leading-tight mb-6">"Our intelligence suggested a confrontation Friday evening. We positioned Steppers an hour before. Nothing happened. That's a win."</blockquote>
+                <p class="text-gray-400 text-sm leading-relaxed mb-8">A combination of community intelligence and rapid SOS deployment prevented what could have been a serious incident between two groups. No arrests. No press. Just a quiet Friday night.</p>
+                <div class="border-t border-stone pt-6">
+                    <div class="text-xs tracking-widest text-stone uppercase">SOS OPERATION LEAD</div>
+                    <div class="text-[10px] tracking-widest text-gold uppercase mt-1">NORTH LONDON — DETAILS CLASSIFIED</div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- SEC: WHERE WE OPERATE -->
+    <section id="network" class="py-24 px-6 md:px-12 border-t border-stone bg-[#0a0a0a]">
+        <div class="max-w-7xl mx-auto">
+            <div class="reveal-el text-xs text-gold tracking-widest uppercase mb-6 border-b border-stone pb-4 inline-block">OPERATIONAL COVERAGE</div>
+            <h2 class="reveal-el font-condensed text-5xl md:text-7xl mb-16">WHERE WE<br><span class="text-gold">OPERATE.</span></h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-16 items-start">
+                <div>
+                    <p class="text-gray-400 leading-relaxed mb-12 max-w-lg">Forever Family currently operates across multiple cities in the United Kingdom. Each operational zone is managed by a certified SOS team lead with at least three active Steppers on the ground. We expand only when the training pipeline is ready — not before.</p>
+
+                    <div class="space-y-0">
+                        <div class="city-row flex justify-between items-center py-5 border-b border-stone group opacity-0">
+                            <div>
+                                <h4 class="font-condensed text-2xl group-hover:text-gold transition-colors">BIRMINGHAM</h4>
+                                <p class="text-[10px] text-stone tracking-widest uppercase mt-1">Primary Hub</p>
+                            </div>
+                            <div class="text-right">
+                                <div class="text-xs text-gold tracking-widest">ACTIVE</div>
+                                <div class="text-[10px] text-stone tracking-widest mt-1">SOS + FFCA + G-LINE</div>
+                            </div>
+                        </div>
+                        <div class="city-row flex justify-between items-center py-5 border-b border-stone group opacity-0">
+                            <div>
+                                <h4 class="font-condensed text-2xl group-hover:text-gold transition-colors">LONDON (NORTH)</h4>
+                                <p class="text-[10px] text-stone tracking-widest uppercase mt-1">Active Zone</p>
+                            </div>
+                            <div class="text-right">
+                                <div class="text-xs text-gold tracking-widest">ACTIVE</div>
+                                <div class="text-[10px] text-stone tracking-widest mt-1">SOS + G-LINE</div>
+                            </div>
+                        </div>
+                        <div class="city-row flex justify-between items-center py-5 border-b border-stone group opacity-0">
+                            <div>
+                                <h4 class="font-condensed text-2xl group-hover:text-gold transition-colors">LONDON (EAST)</h4>
+                                <p class="text-[10px] text-stone tracking-widest uppercase mt-1">Active Zone</p>
+                            </div>
+                            <div class="text-right">
+                                <div class="text-xs text-gold tracking-widest">ACTIVE</div>
+                                <div class="text-[10px] text-stone tracking-widest mt-1">SOS + G-LINE</div>
+                            </div>
+                        </div>
+                        <div class="city-row flex justify-between items-center py-5 border-b border-stone group opacity-0">
+                            <div>
+                                <h4 class="font-condensed text-2xl group-hover:text-gold transition-colors">SHEFFIELD</h4>
+                                <p class="text-[10px] text-stone tracking-widest uppercase mt-1">Active Zone</p>
+                            </div>
+                            <div class="text-right">
+                                <div class="text-xs text-gold tracking-widest">ACTIVE</div>
+                                <div class="text-[10px] text-stone tracking-widest mt-1">G-LINE + FFCA</div>
+                            </div>
+                        </div>
+                        <div class="city-row flex justify-between items-center py-5 group opacity-0">
+                            <div>
+                                <h4 class="font-condensed text-2xl text-stone group-hover:text-white transition-colors">MANCHESTER</h4>
+                                <p class="text-[10px] text-stone tracking-widest uppercase mt-1">In Development</p>
+                            </div>
+                            <div class="text-right">
+                                <div class="text-xs text-stone tracking-widest">RECRUITING</div>
+                                <div class="text-[10px] text-stone tracking-widest mt-1">PIPELINE IN PROGRESS</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Network Visual -->
+                <div class="hidden md:block relative h-[480px] border border-stone bg-[#0d0d0d] overflow-hidden">
+                    <svg viewBox="0 0 400 480" class="w-full h-full" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Grey base lines -->
+                        <g stroke="#2A2A2A" stroke-width="1" fill="none">
+                            <line x1="200" y1="260" x2="130" y2="110"/>
+                            <line x1="200" y1="260" x2="270" y2="130"/>
+                            <line x1="200" y1="260" x2="310" y2="340"/>
+                            <line x1="200" y1="260" x2="90" y2="390" stroke-dasharray="4 4"/>
+                        </g>
+                        <!-- Gold active lines -->
+                        <g stroke="#D4AF37" stroke-width="1.5" fill="none">
+                            <line x1="200" y1="260" x2="130" y2="110" class="net-draw" stroke-dasharray="250" stroke-dashoffset="250"/>
+                            <line x1="200" y1="260" x2="270" y2="130" class="net-draw" stroke-dasharray="250" stroke-dashoffset="250"/>
+                            <line x1="200" y1="260" x2="310" y2="340" class="net-draw" stroke-dasharray="250" stroke-dashoffset="250"/>
+                        </g>
+                        <!-- Hub: Birmingham -->
+                        <circle cx="200" cy="260" r="10" fill="#D4AF37"/>
+                        <circle cx="200" cy="260" r="22" fill="none" stroke="#D4AF37" stroke-width="1" opacity="0.3" class="hub-pulse"/>
+                        <text x="200" y="285" text-anchor="middle" fill="#D4AF37" font-size="9" font-family="Oswald,sans-serif" letter-spacing="2">BIRMINGHAM</text>
+                        <!-- London N -->
+                        <circle cx="130" cy="110" r="6" fill="#2A2A2A" stroke="#D4AF37" stroke-width="1.5" class="net-node"/>
+                        <text x="130" y="97" text-anchor="middle" fill="#F5F2EB" font-size="8" font-family="Oswald,sans-serif" letter-spacing="1">LONDON N</text>
+                        <!-- London E -->
+                        <circle cx="270" cy="130" r="6" fill="#2A2A2A" stroke="#D4AF37" stroke-width="1.5" class="net-node"/>
+                        <text x="270" y="117" text-anchor="middle" fill="#F5F2EB" font-size="8" font-family="Oswald,sans-serif" letter-spacing="1">LONDON E</text>
+                        <!-- Sheffield -->
+                        <circle cx="310" cy="340" r="6" fill="#2A2A2A" stroke="#D4AF37" stroke-width="1.5" class="net-node"/>
+                        <text x="340" y="344" text-anchor="start" fill="#F5F2EB" font-size="8" font-family="Oswald,sans-serif" letter-spacing="1">SHEFFIELD</text>
+                        <!-- Manchester (dormant) -->
+                        <circle cx="90" cy="390" r="5" fill="#111" stroke="#2A2A2A" stroke-width="1.5"/>
+                        <text x="55" y="394" text-anchor="middle" fill="#2A2A2A" font-size="8" font-family="Oswald,sans-serif" letter-spacing="1">MCR</text>
+                        <!-- Legend -->
+                        <text x="20" y="460" fill="#2A2A2A" font-size="7" font-family="Oswald,sans-serif" letter-spacing="2">OPERATIONAL NETWORK — 2025</text>
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="py-24 px-6 md:px-12 bg-[#0d0d0d] border-t border-stone text-center">
+        <div class="max-w-2xl mx-auto">
+            <h2 class="reveal-el font-condensed text-5xl md:text-6xl mb-6">READY TO STEP<br><span class="text-gold">FORWARD?</span></h2>
+            <p class="reveal-el text-gray-400 mb-10">Whether you want to train as a Stepper or invest as a member, there's a path for you.</p>
+            <div class="reveal-el flex flex-col sm:flex-row gap-6 justify-center">
+                <a href="membership.html" class="inline-block px-10 py-4 bg-gold text-[#0d0d0d] font-condensed text-xl tracking-widest hover:bg-white transition-colors duration-300">BECOME A MEMBER</a>
+                <a href="programmes.html" class="inline-block px-10 py-4 border border-stone text-white font-condensed text-xl tracking-widest hover:border-gold hover:text-gold transition-colors duration-300">OUR PROGRAMMES</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="py-24 px-6 md:px-12 bg-[#050505] relative overflow-hidden border-t border-stone flex flex-col items-center">
+        <h2 class="font-condensed text-[8vw] md:text-[6vw] text-stone opacity-30 text-center leading-none mb-12 footer-promise">FOREVER MEANS WE STAY.</h2>
+        <div class="flex gap-8 text-xs tracking-widest uppercase text-gray-500 mb-12 z-10 relative">
+            <a href="#" class="hover:text-gold transition-colors">Instagram</a>
+            <a href="#" class="hover:text-gold transition-colors">Patreon</a>
+            <a href="membership.html#join-form" class="hover:text-gold transition-colors">Join</a>
+            <a href="#" class="hover:text-gold transition-colors">Privacy</a>
+        </div>
+        <div class="text-xs tracking-widest text-stone uppercase mb-8 z-10 relative text-center">
+            PIA — Public &nbsp;|&nbsp; FFCA — Confidential &nbsp;|&nbsp; SOS — Classified
+        </div>
+        <div class="w-full max-w-7xl h-[1px] bg-stone relative overflow-hidden z-10">
+            <div class="absolute top-0 left-0 h-full bg-gold w-full transform -translate-x-full final-line"></div>
+        </div>
+    </footer>
+
+    <!-- G-LINE MODAL -->
+    <div id="gline-modal" class="fixed inset-0 z-[9998] bg-[#0d0d0d] flex items-center justify-center p-6 pointer-events-none opacity-0">
+        <div id="gline-panel" class="w-full max-w-2xl bg-[#111] border border-gold p-8 md:p-12 relative overflow-hidden">
+            <div class="absolute top-0 left-0 w-8 h-8 border-t-2 border-l-2 border-gold m-4 pointer-events-none"></div>
+            <div class="absolute top-0 right-0 w-8 h-8 border-t-2 border-r-2 border-gold m-4 pointer-events-none"></div>
+            <div class="absolute bottom-0 left-0 w-8 h-8 border-b-2 border-l-2 border-gold m-4 pointer-events-none"></div>
+            <div class="absolute bottom-0 right-0 w-8 h-8 border-b-2 border-r-2 border-gold m-4 pointer-events-none"></div>
+            <button id="gline-close" class="absolute top-6 right-6 text-stone hover:text-gold transition-colors text-xs tracking-widest uppercase z-10">✕ CLOSE</button>
+            <div class="text-xs text-gold tracking-widest uppercase mb-2">EMERGENCY REFERRAL</div>
+            <h2 class="font-condensed text-4xl md:text-5xl mb-2">THE <span class="text-gold">G-LINE</span></h2>
+            <p class="text-gray-400 text-sm mb-8 max-w-lg">Know someone who needs help? This is how you reach us. We respond within 24 hours. For immediate life-threatening situations, always call 999 first.</p>
+            <form id="gline-form" class="space-y-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="relative">
+                        <input type="text" id="gline-your-name" required class="w-full bg-transparent border-b border-stone py-3 text-white focus:outline-none focus:border-gold transition-colors peer" placeholder=" ">
+                        <label for="gline-your-name" class="absolute left-0 top-3 text-stone uppercase tracking-widest text-xs transition-all peer-focus:-top-4 peer-focus:text-gold peer-focus:text-[10px] peer-not-placeholder-shown:-top-4 peer-not-placeholder-shown:text-gold peer-not-placeholder-shown:text-[10px]">Your Name</label>
+                    </div>
+                    <div class="relative">
+                        <input type="text" id="gline-who" required class="w-full bg-transparent border-b border-stone py-3 text-white focus:outline-none focus:border-gold transition-colors peer" placeholder=" ">
+                        <label for="gline-who" class="absolute left-0 top-3 text-stone uppercase tracking-widest text-xs transition-all peer-focus:-top-4 peer-focus:text-gold peer-focus:text-[10px] peer-not-placeholder-shown:-top-4 peer-not-placeholder-shown:text-gold peer-not-placeholder-shown:text-[10px]">Who Needs Help</label>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="relative">
+                        <input type="text" id="gline-relationship" class="w-full bg-transparent border-b border-stone py-3 text-white focus:outline-none focus:border-gold transition-colors peer" placeholder=" ">
+                        <label for="gline-relationship" class="absolute left-0 top-3 text-stone uppercase tracking-widest text-xs transition-all peer-focus:-top-4 peer-focus:text-gold peer-focus:text-[10px] peer-not-placeholder-shown:-top-4 peer-not-placeholder-shown:text-gold peer-not-placeholder-shown:text-[10px]">Your Relationship to Them</label>
+                    </div>
+                    <div class="relative">
+                        <select id="gline-urgency" required class="w-full bg-transparent border-b border-stone py-3 text-stone uppercase tracking-widest text-xs focus:outline-none focus:border-gold focus:text-white transition-colors appearance-none rounded-none">
+                            <option value="" disabled selected>Urgency Level</option>
+                            <option value="immediate" class="bg-[#111] text-white">Immediate — Within hours</option>
+                            <option value="urgent" class="bg-[#111] text-white">Urgent — Within 24 hours</option>
+                            <option value="ongoing" class="bg-[#111] text-white">Ongoing — Developing situation</option>
+                            <option value="preventive" class="bg-[#111] text-white">Preventive — Before it escalates</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="relative">
+                    <textarea id="gline-situation" rows="4" required class="w-full bg-transparent border-b border-stone py-3 text-white focus:outline-none focus:border-gold transition-colors peer resize-none" placeholder=" "></textarea>
+                    <label for="gline-situation" class="absolute left-0 top-3 text-stone uppercase tracking-widest text-xs transition-all peer-focus:-top-4 peer-focus:text-gold peer-focus:text-[10px] peer-not-placeholder-shown:-top-4 peer-not-placeholder-shown:text-gold peer-not-placeholder-shown:text-[10px]">Describe the Situation</label>
+                </div>
+                <div id="gline-error" class="hidden text-sm text-red-400 tracking-widest uppercase text-center py-1">Something went wrong. Please try again.</div>
+                <button type="submit" class="w-full px-12 py-4 bg-gold text-[#0d0d0d] font-condensed text-xl tracking-widest hover:bg-white transition-colors duration-300 gline-submit-btn">
+                    <span class="gline-btn-text">SEND REFERRAL</span>
+                    <span class="gline-btn-loading hidden">SENDING...</span>
+                </button>
+            </form>
+            <div class="gline-success absolute inset-0 bg-[#0d0d0d] flex items-center justify-center z-20 translate-y-full">
+                <div class="text-center p-8">
+                    <div class="w-16 h-16 border-2 border-gold rounded-full flex items-center justify-center mx-auto mb-6">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    </div>
+                    <h3 class="font-condensed text-3xl text-gold mb-2">REFERRAL RECEIVED.</h3>
+                    <p class="text-gray-400 text-sm tracking-widest uppercase mt-2">We respond within 24 hours.<br>For emergencies, call 999.</p>
+                    <button class="mt-8 text-xs tracking-widest text-gold uppercase hover:text-white transition-colors gline-close-trigger">CLOSE</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            gsap.registerPlugin(ScrollTrigger);
+
+            // ─── MOBILE MENU ─────────────────────────────────────────────────
+            const mobileMenu = document.getElementById('mobile-menu');
+            const menuBtn    = document.getElementById('mobile-menu-btn');
+            const menuClose  = document.getElementById('mobile-menu-close');
+            const hamLines   = menuBtn.querySelectorAll('.ham-line');
+            let menuOpen     = false;
+
+            function openMenu() {
+                menuOpen = true;
+                document.body.style.overflow = 'hidden';
+                gsap.set(mobileMenu, { pointerEvents: 'auto' });
+                gsap.to(mobileMenu, { opacity: 1, duration: 0.25, ease: 'power2.out' });
+                gsap.to('.mob-link', { x: 0, opacity: 1, duration: 0.55, stagger: 0.07, ease: 'power3.out', delay: 0.1 });
+                gsap.to(hamLines[0], { rotation: 45,  y:  6.5, duration: 0.3, ease: 'power2.inOut' });
+                gsap.to(hamLines[1], { opacity: 0, x: 8, duration: 0.2 });
+                gsap.to(hamLines[2], { rotation: -45, y: -6.5, width: '1.5rem', duration: 0.3, ease: 'power2.inOut' });
+            }
+            function closeMenu() {
+                menuOpen = false;
+                document.body.style.overflow = '';
+                gsap.to('.mob-link', { x: -24, opacity: 0, duration: 0.25, stagger: 0.04, ease: 'power2.in' });
+                gsap.to(mobileMenu, { opacity: 0, duration: 0.3, ease: 'power2.in', delay: 0.15, onComplete: () => gsap.set(mobileMenu, { pointerEvents: 'none' }) });
+                gsap.to(hamLines[0], { rotation: 0, y: 0, duration: 0.3, ease: 'power2.inOut' });
+                gsap.to(hamLines[1], { opacity: 1, x: 0, duration: 0.2, delay: 0.1 });
+                gsap.to(hamLines[2], { rotation: 0, y: 0, width: '1rem', duration: 0.3, ease: 'power2.inOut' });
+            }
+            menuBtn.addEventListener('click', () => menuOpen ? closeMenu() : openMenu());
+            menuClose.addEventListener('click', closeMenu);
+            document.querySelectorAll('.mob-link').forEach(link => {
+                if (link.tagName === 'A') link.addEventListener('click', closeMenu);
+            });
+
+            // ─── G-LINE MODAL ─────────────────────────────────────────────────
+            const glineModal = document.getElementById('gline-modal');
+            const glinePanel = document.getElementById('gline-panel');
+            function openGline() {
+                gsap.set(glineModal, { pointerEvents: 'auto' });
+                gsap.to(glineModal, { opacity: 1, duration: 0.3, ease: 'power2.out' });
+                gsap.fromTo(glinePanel, { scale: 0.94, y: 20 }, { scale: 1, y: 0, duration: 0.4, ease: 'back.out(1.4)' });
+                document.body.style.overflow = 'hidden';
+            }
+            function closeGline() {
+                gsap.to(glineModal, { opacity: 0, duration: 0.25, ease: 'power2.in', onComplete: () => {
+                    gsap.set(glineModal, { pointerEvents: 'none' });
+                    document.body.style.overflow = '';
+                }});
+            }
+            document.getElementById('gline-close').addEventListener('click', closeGline);
+            document.querySelectorAll('.gline-close-trigger').forEach(el => el.addEventListener('click', closeGline));
+            glineModal.addEventListener('click', (e) => { if (e.target === glineModal) closeGline(); });
+            document.querySelectorAll('.gline-trigger').forEach(el => el.addEventListener('click', (e) => { e.preventDefault(); openGline(); }));
+
+            document.getElementById('gline-form').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const btn = e.target.querySelector('.gline-submit-btn');
+                btn.querySelector('.gline-btn-text').classList.add('hidden');
+                btn.querySelector('.gline-btn-loading').classList.remove('hidden');
+                btn.disabled = true;
+                const payload = {
+                    name: document.getElementById('gline-your-name').value,
+                    referralName: document.getElementById('gline-who').value,
+                    relationship: document.getElementById('gline-relationship').value,
+                    urgency: document.getElementById('gline-urgency').value,
+                    situation: document.getElementById('gline-situation').value,
+                };
+                try { await fetch('/api/referral', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) }); } catch (_) {}
+                gsap.to('.gline-success', { y: '0%', duration: 0.8, ease: 'power4.out' });
+            });
+
+            // ─── PAGE ANIMATIONS ──────────────────────────────────────────────
+            gsap.utils.toArray('.reveal-el').forEach(el => {
+                gsap.fromTo(el, { opacity: 0, y: 30 }, {
+                    opacity: 1, y: 0, duration: 1, ease: 'power3.out',
+                    scrollTrigger: { trigger: el, start: 'top 88%' }
+                });
+            });
+
+            // Pipeline steps
+            gsap.utils.toArray('.pipe-step').forEach((step, i) => {
+                gsap.to(step, {
+                    opacity: 1, y: 0, duration: 0.9, ease: 'power3.out',
+                    scrollTrigger: { trigger: step, start: 'top 80%' },
+                    delay: i * 0.05
+                });
+            });
+
+            // Pipeline line draw
+            gsap.to('.pipeline-draw', {
+                scaleY: 1, ease: 'none',
+                scrollTrigger: { trigger: '#pipeline', start: 'top center', end: 'bottom center', scrub: 1 }
+            });
+
+            // Stories reveal
+            gsap.utils.toArray('.story-card').forEach((card, i) => {
+                gsap.to(card, {
+                    opacity: 1, duration: 0.8, ease: 'power2.out',
+                    scrollTrigger: { trigger: card, start: 'top 82%' },
+                    delay: i * 0.12
+                });
+            });
+
+            // City rows
+            gsap.utils.toArray('.city-row').forEach((row, i) => {
+                gsap.fromTo(row, { opacity: 0, x: -20 }, {
+                    opacity: 1, x: 0, duration: 0.6, ease: 'power2.out',
+                    scrollTrigger: { trigger: row, start: 'top 88%' },
+                    delay: i * 0.08
+                });
+            });
+
+            // Network lines
+            gsap.to('.net-draw', {
+                strokeDashoffset: 0, duration: 1.5, ease: 'power2.inOut', stagger: 0.2,
+                scrollTrigger: { trigger: '#network', start: 'top 65%' }
+            });
+            gsap.to('.hub-pulse', { r: 30, opacity: 0.1, repeat: -1, yoyo: true, duration: 2, ease: 'sine.inOut' });
+            gsap.utils.toArray('.net-node').forEach((node, i) => {
+                gsap.fromTo(node, { scale: 0, transformOrigin: '50% 50%' }, {
+                    scale: 1, duration: 0.5, ease: 'back.out(1.7)',
+                    scrollTrigger: { trigger: '#network', start: 'top 65%' },
+                    delay: 0.8 + i * 0.15
+                });
+            });
+
+            // Footer
+            gsap.to(".final-line", { x: "0%", duration: 1.5, ease: "power2.out", scrollTrigger: { trigger: "footer", start: "top 80%" } });
+            gsap.to(".footer-promise", { color: "#D4AF37", opacity: 1, duration: 1, scrollTrigger: { trigger: "footer", start: "top 60%" } });
+        });
+    </script>
+</body>
+</html>

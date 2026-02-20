@@ -1,0 +1,112 @@
+const express = require('express');
+const path = require('path');
+const fs = require('fs');
+
+const app = express();
+const PORT = process.env.PORT || 3000;
+const DATA_DIR = path.join(__dirname, 'data');
+
+// Ensure data directory exists
+if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
+
+app.use(express.json());
+app.use(express.static(__dirname));
+
+// ─── Helpers ───────────────────────────────────────────────────────────────
+function readJSON(file) {
+    try { return JSON.parse(fs.readFileSync(file, 'utf8')); } catch (_) { return []; }
+}
+function writeJSON(file, data) {
+    fs.writeFileSync(file, JSON.stringify(data, null, 2));
+}
+
+// ─── POST /api/join ─────────────────────────────────────────────────────────
+app.post('/api/join', (req, res) => {
+    const { name, email, phone, city, interest, message } = req.body;
+    if (!name || !email || !city || !interest) {
+        return res.status(400).json({ error: 'Required fields missing.' });
+    }
+
+    const file = path.join(DATA_DIR, 'submissions.json');
+    const submissions = readJSON(file);
+    submissions.push({
+        id: Date.now(),
+        timestamp: new Date().toISOString(),
+        name, email, phone: phone || '', city, interest, message: message || ''
+    });
+    writeJSON(file, submissions);
+
+    console.log(`[JOIN] ${name} <${email}> — ${interest}`);
+    res.json({ success: true });
+});
+
+// ─── POST /api/referral ──────────────────────────────────────────────────────
+app.post('/api/referral', (req, res) => {
+    const { name, referralName, relationship, urgency, situation } = req.body;
+    if (!name || !referralName || !situation) {
+        return res.status(400).json({ error: 'Required fields missing.' });
+    }
+
+    const file = path.join(DATA_DIR, 'referrals.json');
+    const referrals = readJSON(file);
+    referrals.push({
+        id: Date.now(),
+        timestamp: new Date().toISOString(),
+        name, referralName, relationship: relationship || '', urgency: urgency || 'unspecified', situation
+    });
+    writeJSON(file, referrals);
+
+    console.log(`[G-LINE] ${name} → re: ${referralName} (${urgency})`);
+    res.json({ success: true });
+});
+
+// ─── POST /api/portal-login ──────────────────────────────────────────────────
+// In production: generate per-member codes stored in a database.
+// These are demo codes for initial setup — replace with real codes per member.
+const TIER_CODES = {
+    'FF-BRONZE-2025': 'bronze',
+    'FF-SILVER-2025': 'silver',
+    'FF-GOLD-2025': 'gold',
+    'FF-PLATINUM-2025': 'platinum',
+};
+
+app.post('/api/portal-login', (req, res) => {
+    const { email, code } = req.body;
+    if (!email || !code) {
+        return res.status(400).json({ error: 'Email and access code required.' });
+    }
+
+    const tier = TIER_CODES[code.toUpperCase().trim()];
+    if (!tier) {
+        return res.status(401).json({ error: 'Invalid access code. Check your welcome email.' });
+    }
+
+    // Simple base64 token — replace with JWT in production
+    const payload = JSON.stringify({ email, tier, issued: Date.now(), exp: Date.now() + 86400000 });
+    const token = Buffer.from(payload).toString('base64');
+
+    console.log(`[PORTAL] ${email} logged in as ${tier}`);
+    res.json({ success: true, tier, token });
+});
+
+// ─── GET /api/submissions (admin view) ───────────────────────────────────────
+app.get('/api/submissions', (req, res) => {
+    const auth = req.headers['x-admin-key'];
+    if (auth !== process.env.ADMIN_KEY && process.env.NODE_ENV !== 'development') {
+        return res.status(403).json({ error: 'Forbidden.' });
+    }
+    res.json({
+        submissions: readJSON(path.join(DATA_DIR, 'submissions.json')),
+        referrals: readJSON(path.join(DATA_DIR, 'referrals.json'))
+    });
+});
+
+// ─── Catch-all: serve index.html ────────────────────────────────────────────
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'index.html'));
+});
+
+app.listen(PORT, () => {
+    console.log(`\n  Forever Family — Server running`);
+    console.log(`  Local: http://localhost:${PORT}\n`);
+});

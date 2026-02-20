@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Membership | FOREVER FAMILY</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <style>
+        :root { --bg: #0d0d0d; --text: #F5F2EB; --gold: #D4AF37; --stone: #2A2A2A; }
+        body { background-color: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; overflow-x: hidden; -webkit-font-smoothing: antialiased; }
+        h1, h2, h3, h4, .font-condensed { font-family: 'Oswald', sans-serif; text-transform: uppercase; line-height: 1.1; }
+        .bg-gold { background-color: var(--gold); }
+        .text-gold { color: var(--gold); }
+        .border-gold { border-color: var(--gold); }
+        .bg-stone-custom { background-color: var(--stone); }
+        .border-stone { border-color: var(--stone); }
+        .grain-overlay {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            pointer-events: none; z-index: 9999; opacity: 0.05;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+    </style>
+</head>
+<body class="relative">
+
+    <div class="grain-overlay"></div>
+
+    <!-- NAV -->
+    <nav class="fixed top-0 left-0 w-full p-6 z-50 flex justify-between items-center mix-blend-difference pointer-events-none">
+        <div class="font-condensed text-2xl tracking-widest pointer-events-auto"><a href="index.html">FOREVER FAMILY</a></div>
+        <div class="hidden md:flex gap-8 text-sm font-medium tracking-widest uppercase pointer-events-auto">
+            <a href="about.html" class="hover:text-gold transition-colors">About</a>
+            <a href="programmes.html" class="hover:text-gold transition-colors">Programmes</a>
+            <a href="membership.html" class="text-gold">Membership</a>
+            <a href="#join-form" class="hover:text-gold transition-colors">Join</a>
+            <a href="portal.html" class="hover:text-gold transition-colors border border-stone px-3 py-1 hover:border-gold">Member Portal</a>
+        </div>
+        <button id="mobile-menu-btn" class="flex md:hidden flex-col justify-center items-end gap-[5px] w-8 h-8 pointer-events-auto" aria-label="Open navigation">
+            <span class="ham-line block bg-white h-[1.5px] w-6 origin-center"></span>
+            <span class="ham-line block bg-white h-[1.5px] w-6 origin-center"></span>
+            <span class="ham-line block bg-white h-[1.5px] w-4 origin-center"></span>
+        </button>
+    </nav>
+
+    <!-- MOBILE MENU -->
+    <div id="mobile-menu" class="fixed inset-0 z-[9996] bg-[#0d0d0d] flex flex-col px-8 pt-7 pb-10 pointer-events-none overflow-y-auto" style="opacity:0">
+        <div class="flex justify-between items-center mb-12">
+            <div class="font-condensed text-2xl tracking-widest">FOREVER FAMILY</div>
+            <button id="mobile-menu-close" class="flex flex-col justify-center items-center w-8 h-8" aria-label="Close navigation">
+                <span class="block bg-white h-[1.5px] w-6 origin-center" style="transform:rotate(45deg) translateY(0.75px)"></span>
+                <span class="block bg-white h-[1.5px] w-6 origin-center" style="transform:rotate(-45deg) translateY(-0.75px)"></span>
+            </button>
+        </div>
+        <div class="border-b border-stone mb-6 pb-3">
+            <span class="text-[10px] text-stone tracking-[0.3em] uppercase">Navigation</span>
+        </div>
+        <nav class="flex flex-col flex-grow">
+            <a href="about.html"      class="mob-link font-condensed text-[14vw] text-white hover:text-gold transition-colors leading-none py-3 border-b border-stone border-opacity-30" style="opacity:0;transform:translateX(-24px)">ABOUT</a>
+            <a href="programmes.html" class="mob-link font-condensed text-[14vw] text-white hover:text-gold transition-colors leading-none py-3 border-b border-stone border-opacity-30" style="opacity:0;transform:translateX(-24px)">PROGRAMMES</a>
+            <a href="membership.html" class="mob-link font-condensed text-[14vw] text-gold leading-none py-3 border-b border-stone border-opacity-30" style="opacity:0;transform:translateX(-24px)">MEMBERSHIP</a>
+            <a href="#join-form"      class="mob-link font-condensed text-[14vw] text-gold leading-none py-3" style="opacity:0;transform:translateX(-24px)">JOIN</a>
+        </nav>
+        <div class="border-t border-stone pt-6 mt-6 flex justify-between items-end">
+            <a href="portal.html" class="mob-link text-xs tracking-widest uppercase text-stone hover:text-gold transition-colors" style="opacity:0;transform:translateX(-24px)">Member Portal →</a>
+            <span class="text-[10px] text-stone tracking-widest uppercase opacity-40">PIA · FFCA · SOS</span>
+        </div>
+    </div>
+
+    <!-- PAGE HEADER -->
+    <section class="pt-48 pb-24 px-6 md:px-12 max-w-7xl mx-auto">
+        <div class="reveal-el text-xs text-gold tracking-widest uppercase mb-6 border-b border-stone pb-4 inline-block">INVEST IN THE MISSION</div>
+        <h1 class="reveal-el font-condensed text-[14vw] md:text-[9vw] leading-none text-white mb-8">JOIN THE<br><span class="text-gold">FAMILY.</span></h1>
+        <p class="reveal-el text-lg md:text-xl text-gray-400 max-w-2xl leading-relaxed">Your investment funds the patrols, sessions, and life-saving interventions that communities depend on. Choose your tier — every level matters.</p>
+    </section>
+
+    <!-- MEMBERSHIP TIERS -->
+    <section id="sec-tiers" class="py-24 bg-[#0a0a0a] border-t border-stone">
+        <div class="px-6 md:px-12 max-w-7xl mx-auto">
+            <div class="reveal-el text-xs text-gold tracking-widest uppercase mb-16 border-b border-stone pb-4 inline-block">MEMBERSHIP TIERS</div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-0 border-t border-l border-stone">
+
+                <!-- BRONZE -->
+                <div class="tier-card border-r border-b border-stone p-8 flex flex-col opacity-0 group hover:bg-[#111] transition-colors duration-300">
+                    <div class="mb-8">
+                        <div class="text-[10px] tracking-widest text-stone uppercase mb-4">TIER 01</div>
+                        <h3 class="font-condensed text-4xl mb-2">BRONZE</h3>
+                        <div class="flex items-baseline gap-1 mt-4">
+                            <span class="font-condensed text-5xl text-gold">£10</span>
+                            <span class="text-stone text-sm">/month</span>
+                        </div>
+                        <div class="w-full h-[1px] bg-stone mt-6"></div>
+                    </div>
+                    <ul class="space-y-4 flex-grow">
+                        <li class="flex items-start gap-3 text-sm text-gray-400">
+                            <span class="text-gold mt-0.5 flex-shrink-0">—</span>Monthly FFCA session access
+                        </li>
+                        <li class="flex items-start gap-3 text-sm text-gray-400">
+                            <span class="text-gold mt-0.5 flex-shrink-0">—</span>G-Line access (standard)
+                        </li>
+                        <li class="flex items-start gap-3 text-sm text-gray-400">
+                            <span class="text-gold mt-0.5 flex-shrink-0">—</span>Monthly digital briefing
+                        </li>
+                        <li class="flex items-start gap-3 text-sm text-gray-400">
+                            <span class="text-gold mt-0.5 flex-shrink-0">—</span>Community forum access
+                        </li>
+                        <li class="flex items-start gap-3 text-sm text-stone line-through">
+                            <span class="mt-0.5 flex-shrink-0">—</span>Operation reports
+                        </li>
+                        <li class="flex items-start gap-3 text-sm text-stone line-through">
+                            <span class="mt-0.5 flex-shrink-0">—</span>FFCA WhatsApp group
+                        </li>
+                        <li class="flex items-start gap-3 text-sm text-stone line-through">
+                            <span class="mt-0.5 flex-shrink-0">—</span>Classified briefings
+                        </li>
+                    </ul>
+                    <a href="#join-form" class="mt-8 w-full py-4 border border-stone text-center font-condensed text-lg tracking-widest text-white group-hover:border-gold group-hover:text-gold transition-colors duration-300 block">SELECT BRONZE</a>
+                </div>
+
+                <!-- SILVER -->
+                <div class="tier-card border-r border-b border-stone p-8 flex flex-col opacity-0 group hover:bg-[#111] transition-colors duration-300">
+                    <div class="mb-8">
+                        <div class="text-[10px] tracking-widest text-stone uppercase mb-4">TIER 02</div>
+                        <h3 class="font-condensed text-4xl mb-2">SILVER</h3>
+                        <div class="flex items-baseline gap-1 mt-4">
+                            <span class="font-condensed text-5xl text-gold">£25</span>
+                            <span class="text-stone text-sm">/month</span>
+                        </div>
+                        <div class="w-full h-[1px] bg-stone mt-6"></div>
+                    </div>
+                    <ul class="space-y-4 flex-grow">
+                        <li class="flex items-start gap-3 text-sm text-gray-400">
+                            <span class="text-gold mt-0.5 flex-shrink-0">—</span>Everything in Bronze
+                        </li>
+                        <li class="flex items-start gap-3 text-sm text-gray-400">
+                            <span class="text-gold mt-0.5 flex-shrink-0">—</span>SOS operation reports (redacted)
+                        </li>
+                        <li class="flex items-start gap-3 text-sm text-gray-400">
+                            <span class="text-gold mt-0.5 flex-shrink-0">—</span>Priority G-Line response
+                        </li>
+                        <li class="flex items-start gap-3 text-sm text-gray-400">
+                            <span class="text-gold mt-0.5 flex-shrink-0">—</span>Instagram Close Friends access
+                        </li>
+                        <li class="flex items-start gap-3 text-sm text-gray-400">
+                            <span class="text-gold mt-0.5 flex-shrink-0">—</span>Quarterly impact report
+                        </li>
+                        <li class="flex items-start gap-3 text-sm text-stone line-through">
+                            <span class="mt-0.5 flex-shrink-0">—</span>FFCA WhatsApp group
+                        </li>
+                        <li class="flex items-start gap-3 text-sm text-stone line-through">
+                            <span class="mt-0.5 flex-shrink-0">—</span>Classified briefings
+                        </li>
+                    </ul>
+                    <a href="#join-form" class="mt-8 w-full py-4 border border-stone text-center font-condensed text-lg tracking-widest text-white group-hover:border-gold group-hover:text-gold transition-colors duration-300 block">SELECT SILVER</a>
+                </div>
+
+                <!-- GOLD -->
+                <div class="tier-card border-r border-b border-stone p-8 flex flex-col opacity-0 relative group hover:bg-[#111] transition-colors duration-300">
+                    <div class="absolute top-4 right-4 bg-gold text-[#0d0d0d] font-condensed text-[10px] tracking-widest px-2 py-1">POPULAR</div>
+                    <div class="mb-8">
+                        <div class="text-[10px] tracking-widest text-stone uppercase mb-4">TIER 03</div>
+                        <h3 class="font-condensed text-4xl mb-2">GOLD</h3>
+                        <div class="flex items-baseline gap-1 mt-4">
+                            <span class="font-condensed text-5xl text-gold">£50</span>
+                            <span class="text-stone text-sm">/month</span>
+                        </div>
+                        <div class="w-full h-[1px] bg-gold mt-6"></div>
+                    </div>
+                    <ul class="space-y-4 flex-grow">
+                        <li class="flex items-start gap-3 text-sm text-gray-400">
+                            <span class="text-gold mt-0.5 flex-shrink-0">—</span>Everything in Silver
+                        </li>
+                        <li class="flex items-start gap-3 text-sm text-gray-400">
+                            <span class="text-gold mt-0.5 flex-shrink-0">—</span>FFCA WhatsApp group invite
+                        </li>
+                        <li class="flex items-start gap-3 text-sm text-gray-400">
+                            <span class="text-gold mt-0.5 flex-shrink-0">—</span>Youth sponsorship dashboard
+                        </li>
+                        <li class="flex items-start gap-3 text-sm text-gray-400">
+                            <span class="text-gold mt-0.5 flex-shrink-0">—</span>Named in annual report
+                        </li>
+                        <li class="flex items-start gap-3 text-sm text-gray-400">
+                            <span class="text-gold mt-0.5 flex-shrink-0">—</span>Bi-monthly briefing call
+                        </li>
+                        <li class="flex items-start gap-3 text-sm text-stone line-through">
+                            <span class="mt-0.5 flex-shrink-0">—</span>Classified briefings
+                        </li>
+                        <li class="flex items-start gap-3 text-sm text-stone line-through">
+                            <span class="mt-0.5 flex-shrink-0">—</span>Direct leadership contact
+                        </li>
+                    </ul>
+                    <a href="#join-form" class="mt-8 w-full py-4 bg-gold text-[#0d0d0d] text-center font-condensed text-lg tracking-widest hover:bg-white transition-colors duration-300 block">SELECT GOLD</a>
+                </div>
+
+                <!-- PLATINUM -->
+                <div class="tier-card border-r border-b border-stone p-8 flex flex-col opacity-0 group hover:bg-[#111] transition-colors duration-300">
+                    <div class="mb-8">
+                        <div class="text-[10px] tracking-widest text-stone uppercase mb-4">TIER 04</div>
+                        <h3 class="font-condensed text-4xl mb-2">PLATINUM</h3>
+                        <div class="flex items-baseline gap-1 mt-4">
+                            <span class="font-condensed text-5xl text-gold">£100</span>
+                            <span class="text-stone text-sm">/month</span>
+                        </div>
+                        <div class="w-full h-[1px] bg-stone mt-6"></div>
+                    </div>
+                    <ul class="space-y-4 flex-grow">
+                        <li class="flex items-start gap-3 text-sm text-gray-400">
+                            <span class="text-gold mt-0.5 flex-shrink-0">—</span>Everything in Gold
+                        </li>
+                        <li class="flex items-start gap-3 text-sm text-gray-400">
+                            <span class="text-gold mt-0.5 flex-shrink-0">—</span>Classified operation briefings
+                        </li>
+                        <li class="flex items-start gap-3 text-sm text-gray-400">
+                            <span class="text-gold mt-0.5 flex-shrink-0">—</span>Direct leadership contact
+                        </li>
+                        <li class="flex items-start gap-3 text-sm text-gray-400">
+                            <span class="text-gold mt-0.5 flex-shrink-0">—</span>Monthly strategic call
+                        </li>
+                        <li class="flex items-start gap-3 text-sm text-gray-400">
+                            <span class="text-gold mt-0.5 flex-shrink-0">—</span>Board-level transparency report
+                        </li>
+                        <li class="flex items-start gap-3 text-sm text-gray-400">
+                            <span class="text-gold mt-0.5 flex-shrink-0">—</span>Portal: all access
+                        </li>
+                        <li class="flex items-start gap-3 text-sm text-gray-400">
+                            <span class="text-gold mt-0.5 flex-shrink-0">—</span>Founding member status
+                        </li>
+                    </ul>
+                    <a href="#join-form" class="mt-8 w-full py-4 border border-stone text-center font-condensed text-lg tracking-widest text-white group-hover:border-gold group-hover:text-gold transition-colors duration-300 block">SELECT PLATINUM</a>
+                </div>
+
+            </div>
+
+            <p class="text-stone text-xs tracking-widest uppercase mt-8 text-center">All memberships are monthly. No contracts. Cancel any time. Access codes are sent via welcome email within 48 hours.</p>
+        </div>
+    </section>
+
+    <!-- SPONSORSHIP -->
+    <section id="sec-sponsorship" class="py-24 px-6 md:px-12 border-t border-stone">
+        <div class="max-w-7xl mx-auto">
+            <div class="reveal-el text-xs text-gold tracking-widest uppercase mb-6 border-b border-stone pb-4 inline-block">ORGANISATIONAL GIVING</div>
+            <div class="flex flex-col md:flex-row justify-between items-start gap-12 mb-16">
+                <h2 class="reveal-el font-condensed text-5xl md:text-7xl">SPONSOR THE<br><span class="text-gold">MISSION.</span></h2>
+                <p class="reveal-el text-gray-400 max-w-lg leading-relaxed self-end">For organisations, businesses, and foundations who want to do more than donate — who want to be part of what Forever Family is building. Sponsorship is transparent, accountable, and direct.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-0 border-t border-l border-stone">
+
+                <div class="sponsor-card border-r border-b border-stone p-10 group opacity-0 hover:bg-[#0a0a0a] transition-colors duration-300">
+                    <div class="text-[10px] tracking-widest text-stone uppercase mb-2">LEVEL 01</div>
+                    <h3 class="font-condensed text-3xl mb-1">COMMUNITY PATRON</h3>
+                    <div class="font-condensed text-4xl text-gold mb-6">£500 <span class="text-xl text-stone">/year</span></div>
+                    <p class="text-gray-400 text-sm leading-relaxed mb-6">Sponsor one FFCA session per year. Your organisation's name is displayed at the session and in our monthly briefing. A direct, visible contribution to community training.</p>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li class="flex gap-3"><span class="text-gold">—</span>Named sponsor of one annual FFCA session</li>
+                        <li class="flex gap-3"><span class="text-gold">—</span>Logo in monthly member briefing</li>
+                        <li class="flex gap-3"><span class="text-gold">—</span>Annual impact letter</li>
+                    </ul>
+                    <a href="#join-form" class="mt-8 inline-block text-xs tracking-widest text-gold uppercase hover:text-white transition-colors">ENQUIRE →</a>
+                </div>
+
+                <div class="sponsor-card border-r border-b border-stone p-10 group opacity-0 hover:bg-[#0a0a0a] transition-colors duration-300">
+                    <div class="text-[10px] tracking-widest text-stone uppercase mb-2">LEVEL 02</div>
+                    <h3 class="font-condensed text-3xl mb-1">YOUTH FUND SPONSOR</h3>
+                    <div class="font-condensed text-4xl text-gold mb-6">£1,000 <span class="text-xl text-stone">/year</span></div>
+                    <p class="text-gray-400 text-sm leading-relaxed mb-6">Fund one young person's complete journey through the 12-Point Programme — from first session to certification. You will receive a named impact report on their progress.</p>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li class="flex gap-3"><span class="text-gold">—</span>Named sponsor of one full programme journey</li>
+                        <li class="flex gap-3"><span class="text-gold">—</span>Progress updates throughout the year</li>
+                        <li class="flex gap-3"><span class="text-gold">—</span>Graduation ceremony invitation</li>
+                    </ul>
+                    <a href="#join-form" class="mt-8 inline-block text-xs tracking-widest text-gold uppercase hover:text-white transition-colors">ENQUIRE →</a>
+                </div>
+
+                <div class="sponsor-card border-r border-b border-stone p-10 group opacity-0 hover:bg-[#0a0a0a] transition-colors duration-300">
+                    <div class="text-[10px] tracking-widest text-stone uppercase mb-2">LEVEL 03</div>
+                    <h3 class="font-condensed text-3xl mb-1">CORPORATE PARTNER</h3>
+                    <div class="font-condensed text-4xl text-gold mb-6">£5,000 <span class="text-xl text-stone">/year</span></div>
+                    <p class="text-gray-400 text-sm leading-relaxed mb-6">Programme co-sponsor. Your organisation's logo appears on operational materials, the website, and in all annual reporting. Quarterly briefings with leadership. A genuine partnership.</p>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li class="flex gap-3"><span class="text-gold">—</span>Co-sponsor credit on all materials</li>
+                        <li class="flex gap-3"><span class="text-gold">—</span>Quarterly briefings with leadership</li>
+                        <li class="flex gap-3"><span class="text-gold">—</span>Full annual impact report</li>
+                        <li class="flex gap-3"><span class="text-gold">—</span>Staff volunteering pathway</li>
+                    </ul>
+                    <a href="#join-form" class="mt-8 inline-block text-xs tracking-widest text-gold uppercase hover:text-white transition-colors">ENQUIRE →</a>
+                </div>
+
+                <div class="sponsor-card border-r border-b border-stone p-10 group opacity-0 hover:bg-[#0a0a0a] transition-colors duration-300 relative">
+                    <div class="absolute top-4 right-4 text-[10px] tracking-widest border border-gold text-gold px-2 py-1">BY APPLICATION</div>
+                    <div class="text-[10px] tracking-widest text-stone uppercase mb-2">LEVEL 04</div>
+                    <h3 class="font-condensed text-3xl mb-1">FOUNDATION PARTNER</h3>
+                    <div class="font-condensed text-4xl text-gold mb-6">£10,000+ <span class="text-xl text-stone">/year</span></div>
+                    <p class="text-gray-400 text-sm leading-relaxed mb-6">Infrastructure partner. This is for organisations ready to help build the long-term foundation of Forever Family — not just fund it. Naming rights, board observer status, and direct governance input.</p>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li class="flex gap-3"><span class="text-gold">—</span>Naming rights on a programme or zone</li>
+                        <li class="flex gap-3"><span class="text-gold">—</span>Board observer seat</li>
+                        <li class="flex gap-3"><span class="text-gold">—</span>Co-design future programmes</li>
+                        <li class="flex gap-3"><span class="text-gold">—</span>Full transparency — all accounts</li>
+                    </ul>
+                    <a href="#join-form" class="mt-8 inline-block text-xs tracking-widest text-gold uppercase hover:text-white transition-colors">APPLY →</a>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- JOIN FORM -->
+    <section id="join-form" class="py-32 px-6 bg-[#0d0d0d] flex items-center justify-center min-h-screen border-t border-stone">
+        <div class="form-container w-full max-w-3xl bg-[#111] border border-gold p-8 md:p-16 relative overflow-hidden" style="clip-path: polygon(0 100%, 100% 100%, 100% 100%, 0% 100%)">
+            <div class="absolute top-0 left-0 w-8 h-8 border-t-2 border-l-2 border-gold m-4"></div>
+            <div class="absolute top-0 right-0 w-8 h-8 border-t-2 border-r-2 border-gold m-4"></div>
+            <div class="absolute bottom-0 left-0 w-8 h-8 border-b-2 border-l-2 border-gold m-4"></div>
+            <div class="absolute bottom-0 right-0 w-8 h-8 border-b-2 border-r-2 border-gold m-4"></div>
+
+            <div class="text-center mb-12 relative z-10">
+                <h2 class="font-condensed text-5xl md:text-6xl mb-4">STEP INTO THE <span class="text-gold">FAMILY</span></h2>
+                <p class="text-gray-400">Leave your details. We read every single one.</p>
+            </div>
+
+            <form id="main-join-form" class="space-y-8 relative z-10">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="relative">
+                        <input type="text" id="name" required class="w-full bg-transparent border-b border-stone py-3 text-white focus:outline-none focus:border-gold transition-colors peer" placeholder=" ">
+                        <label for="name" class="absolute left-0 top-3 text-stone uppercase tracking-widest text-xs transition-all peer-focus:-top-4 peer-focus:text-gold peer-focus:text-[10px] peer-not-placeholder-shown:-top-4 peer-not-placeholder-shown:text-gold peer-not-placeholder-shown:text-[10px]">Your Name</label>
+                    </div>
+                    <div class="relative">
+                        <input type="email" id="email" required class="w-full bg-transparent border-b border-stone py-3 text-white focus:outline-none focus:border-gold transition-colors peer" placeholder=" ">
+                        <label for="email" class="absolute left-0 top-3 text-stone uppercase tracking-widest text-xs transition-all peer-focus:-top-4 peer-focus:text-gold peer-focus:text-[10px] peer-not-placeholder-shown:-top-4 peer-not-placeholder-shown:text-gold peer-not-placeholder-shown:text-[10px]">Email Address</label>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="relative">
+                        <input type="tel" id="phone" class="w-full bg-transparent border-b border-stone py-3 text-white focus:outline-none focus:border-gold transition-colors peer" placeholder=" ">
+                        <label for="phone" class="absolute left-0 top-3 text-stone uppercase tracking-widest text-xs transition-all peer-focus:-top-4 peer-focus:text-gold peer-focus:text-[10px] peer-not-placeholder-shown:-top-4 peer-not-placeholder-shown:text-gold peer-not-placeholder-shown:text-[10px]">Phone (optional)</label>
+                    </div>
+                    <div class="relative">
+                        <input type="text" id="city" required class="w-full bg-transparent border-b border-stone py-3 text-white focus:outline-none focus:border-gold transition-colors peer" placeholder=" ">
+                        <label for="city" class="absolute left-0 top-3 text-stone uppercase tracking-widest text-xs transition-all peer-focus:-top-4 peer-focus:text-gold peer-focus:text-[10px] peer-not-placeholder-shown:-top-4 peer-not-placeholder-shown:text-gold peer-not-placeholder-shown:text-[10px]">City</label>
+                    </div>
+                </div>
+                <div class="relative">
+                    <select id="interest" required class="w-full bg-transparent border-b border-stone py-3 text-stone uppercase tracking-widest text-xs focus:outline-none focus:border-gold focus:text-white transition-colors appearance-none rounded-none">
+                        <option value="" disabled selected>I want to...</option>
+                        <optgroup label="Invest as Member" class="bg-[#111] text-white">
+                            <option value="bronze" class="bg-[#111] text-white">Bronze — Fund FFCA Sessions (£10/mo)</option>
+                            <option value="silver" class="bg-[#111] text-white">Silver — Fund Community Patrols (£25/mo)</option>
+                            <option value="gold" class="bg-[#111] text-white">Gold — Sponsor Youth Development (£50/mo)</option>
+                            <option value="platinum" class="bg-[#111] text-white">Platinum — Fund High-Risk Interventions (£100/mo)</option>
+                        </optgroup>
+                        <optgroup label="Sponsorship" class="bg-[#111] text-white">
+                            <option value="sponsor-community" class="bg-[#111] text-white">Community Patron — £500/year</option>
+                            <option value="sponsor-youth" class="bg-[#111] text-white">Youth Fund Sponsor — £1,000/year</option>
+                            <option value="sponsor-corporate" class="bg-[#111] text-white">Corporate Partner — £5,000/year</option>
+                            <option value="sponsor-foundation" class="bg-[#111] text-white">Foundation Partner — £10,000+/year</option>
+                        </optgroup>
+                        <optgroup label="Get Involved" class="bg-[#111] text-white">
+                            <option value="stepper" class="bg-[#111] text-white">Train as a Stepper — Join FFCA</option>
+                            <option value="referral" class="bg-[#111] text-white">Make a Referral — Request G-Line Access</option>
+                        </optgroup>
+                    </select>
+                </div>
+                <div class="relative">
+                    <textarea id="message" rows="3" class="w-full bg-transparent border-b border-stone py-3 text-white focus:outline-none focus:border-gold transition-colors peer resize-none" placeholder=" "></textarea>
+                    <label for="message" class="absolute left-0 top-3 text-stone uppercase tracking-widest text-xs transition-all peer-focus:-top-4 peer-focus:text-gold peer-focus:text-[10px] peer-not-placeholder-shown:-top-4 peer-not-placeholder-shown:text-gold peer-not-placeholder-shown:text-[10px]">A brief message (optional)</label>
+                </div>
+                <div id="form-error" class="hidden text-sm text-red-400 tracking-widest uppercase text-center py-2">Something went wrong. Please try again.</div>
+                <div class="text-center pt-8 w-full">
+                    <button type="submit" class="w-full md:w-auto px-16 py-5 bg-gold text-[#0d0d0d] font-condensed text-2xl tracking-widest hover:bg-white transition-colors duration-300 submit-btn disabled:opacity-60 disabled:cursor-not-allowed">
+                        <span class="btn-text">SUBMIT</span>
+                        <span class="btn-loading hidden">SENDING...</span>
+                    </button>
+                </div>
+            </form>
+
+            <div class="success-stamp absolute inset-0 bg-[#0d0d0d] flex items-center justify-center z-20 transform translate-y-full transition-transform duration-700 ease-in-out border-4 border-gold">
+                <div class="text-center">
+                    <div class="w-16 h-16 border-2 border-gold rounded-full flex items-center justify-center mx-auto mb-6">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    </div>
+                    <h3 class="font-condensed text-4xl text-gold mb-2">WELCOME TO</h3>
+                    <h2 class="font-condensed text-5xl text-white">FOREVER FAMILY.</h2>
+                    <p class="text-gray-400 mt-4 text-sm tracking-widest uppercase">We'll be in touch.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="py-24 px-6 md:px-12 bg-[#050505] relative overflow-hidden border-t border-stone flex flex-col items-center">
+        <h2 class="font-condensed text-[8vw] md:text-[6vw] text-stone opacity-30 text-center leading-none mb-12 footer-promise">FOREVER MEANS WE STAY.</h2>
+        <div class="flex gap-8 text-xs tracking-widest uppercase text-gray-500 mb-12 z-10 relative">
+            <a href="#" class="hover:text-gold transition-colors">Instagram</a>
+            <a href="#" class="hover:text-gold transition-colors">Patreon</a>
+            <a href="#join-form" class="hover:text-gold transition-colors">Join</a>
+            <a href="#" class="hover:text-gold transition-colors">Privacy</a>
+        </div>
+        <div class="text-xs tracking-widest text-stone uppercase mb-8 z-10 relative text-center">
+            PIA — Public &nbsp;|&nbsp; FFCA — Confidential &nbsp;|&nbsp; SOS — Classified
+        </div>
+        <div class="w-full max-w-7xl h-[1px] bg-stone relative overflow-hidden z-10">
+            <div class="absolute top-0 left-0 h-full bg-gold w-full transform -translate-x-full final-line"></div>
+        </div>
+    </footer>
+
+    <!-- G-LINE MODAL -->
+    <div id="gline-modal" class="fixed inset-0 z-[9998] bg-[#0d0d0d] flex items-center justify-center p-6 pointer-events-none opacity-0">
+        <div id="gline-panel" class="w-full max-w-2xl bg-[#111] border border-gold p-8 md:p-12 relative overflow-hidden">
+            <div class="absolute top-0 left-0 w-8 h-8 border-t-2 border-l-2 border-gold m-4 pointer-events-none"></div>
+            <div class="absolute top-0 right-0 w-8 h-8 border-t-2 border-r-2 border-gold m-4 pointer-events-none"></div>
+            <div class="absolute bottom-0 left-0 w-8 h-8 border-b-2 border-l-2 border-gold m-4 pointer-events-none"></div>
+            <div class="absolute bottom-0 right-0 w-8 h-8 border-b-2 border-r-2 border-gold m-4 pointer-events-none"></div>
+            <button id="gline-close" class="absolute top-6 right-6 text-stone hover:text-gold transition-colors text-xs tracking-widest uppercase z-10">✕ CLOSE</button>
+            <div class="text-xs text-gold tracking-widest uppercase mb-2">EMERGENCY REFERRAL</div>
+            <h2 class="font-condensed text-4xl md:text-5xl mb-2">THE <span class="text-gold">G-LINE</span></h2>
+            <p class="text-gray-400 text-sm mb-8 max-w-lg">Know someone who needs help? This is how you reach us. We respond within 24 hours. For immediate life-threatening situations, always call 999 first.</p>
+            <form id="gline-form" class="space-y-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="relative">
+                        <input type="text" id="gline-your-name" required class="w-full bg-transparent border-b border-stone py-3 text-white focus:outline-none focus:border-gold transition-colors peer" placeholder=" ">
+                        <label for="gline-your-name" class="absolute left-0 top-3 text-stone uppercase tracking-widest text-xs transition-all peer-focus:-top-4 peer-focus:text-gold peer-focus:text-[10px] peer-not-placeholder-shown:-top-4 peer-not-placeholder-shown:text-gold peer-not-placeholder-shown:text-[10px]">Your Name</label>
+                    </div>
+                    <div class="relative">
+                        <input type="text" id="gline-who" required class="w-full bg-transparent border-b border-stone py-3 text-white focus:outline-none focus:border-gold transition-colors peer" placeholder=" ">
+                        <label for="gline-who" class="absolute left-0 top-3 text-stone uppercase tracking-widest text-xs transition-all peer-focus:-top-4 peer-focus:text-gold peer-focus:text-[10px] peer-not-placeholder-shown:-top-4 peer-not-placeholder-shown:text-gold peer-not-placeholder-shown:text-[10px]">Who Needs Help</label>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="relative">
+                        <input type="text" id="gline-relationship" class="w-full bg-transparent border-b border-stone py-3 text-white focus:outline-none focus:border-gold transition-colors peer" placeholder=" ">
+                        <label for="gline-relationship" class="absolute left-0 top-3 text-stone uppercase tracking-widest text-xs transition-all peer-focus:-top-4 peer-focus:text-gold peer-focus:text-[10px] peer-not-placeholder-shown:-top-4 peer-not-placeholder-shown:text-gold peer-not-placeholder-shown:text-[10px]">Your Relationship to Them</label>
+                    </div>
+                    <div class="relative">
+                        <select id="gline-urgency" required class="w-full bg-transparent border-b border-stone py-3 text-stone uppercase tracking-widest text-xs focus:outline-none focus:border-gold focus:text-white transition-colors appearance-none rounded-none">
+                            <option value="" disabled selected>Urgency Level</option>
+                            <option value="immediate" class="bg-[#111] text-white">Immediate — Within hours</option>
+                            <option value="urgent" class="bg-[#111] text-white">Urgent — Within 24 hours</option>
+                            <option value="ongoing" class="bg-[#111] text-white">Ongoing — Developing situation</option>
+                            <option value="preventive" class="bg-[#111] text-white">Preventive — Before it escalates</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="relative">
+                    <textarea id="gline-situation" rows="4" required class="w-full bg-transparent border-b border-stone py-3 text-white focus:outline-none focus:border-gold transition-colors peer resize-none" placeholder=" "></textarea>
+                    <label for="gline-situation" class="absolute left-0 top-3 text-stone uppercase tracking-widest text-xs transition-all peer-focus:-top-4 peer-focus:text-gold peer-focus:text-[10px] peer-not-placeholder-shown:-top-4 peer-not-placeholder-shown:text-gold peer-not-placeholder-shown:text-[10px]">Describe the Situation</label>
+                </div>
+                <div id="gline-error" class="hidden text-sm text-red-400 tracking-widest uppercase text-center py-1">Something went wrong. Please try again.</div>
+                <button type="submit" class="w-full px-12 py-4 bg-gold text-[#0d0d0d] font-condensed text-xl tracking-widest hover:bg-white transition-colors duration-300 gline-submit-btn">
+                    <span class="gline-btn-text">SEND REFERRAL</span>
+                    <span class="gline-btn-loading hidden">SENDING...</span>
+                </button>
+            </form>
+            <div class="gline-success absolute inset-0 bg-[#0d0d0d] flex items-center justify-center z-20 translate-y-full">
+                <div class="text-center p-8">
+                    <div class="w-16 h-16 border-2 border-gold rounded-full flex items-center justify-center mx-auto mb-6">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    </div>
+                    <h3 class="font-condensed text-3xl text-gold mb-2">REFERRAL RECEIVED.</h3>
+                    <p class="text-gray-400 text-sm tracking-widest uppercase mt-2">We respond within 24 hours.<br>For emergencies, call 999.</p>
+                    <button class="mt-8 text-xs tracking-widest text-gold uppercase hover:text-white transition-colors gline-close-trigger">CLOSE</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            gsap.registerPlugin(ScrollTrigger);
+
+            // ─── MOBILE MENU ─────────────────────────────────────────────────
+            const mobileMenu = document.getElementById('mobile-menu');
+            const menuBtn    = document.getElementById('mobile-menu-btn');
+            const menuClose  = document.getElementById('mobile-menu-close');
+            const hamLines   = menuBtn.querySelectorAll('.ham-line');
+            let menuOpen     = false;
+
+            function openMenu() {
+                menuOpen = true;
+                document.body.style.overflow = 'hidden';
+                gsap.set(mobileMenu, { pointerEvents: 'auto' });
+                gsap.to(mobileMenu, { opacity: 1, duration: 0.25, ease: 'power2.out' });
+                gsap.to('.mob-link', { x: 0, opacity: 1, duration: 0.55, stagger: 0.07, ease: 'power3.out', delay: 0.1 });
+                gsap.to(hamLines[0], { rotation: 45,  y:  6.5, duration: 0.3, ease: 'power2.inOut' });
+                gsap.to(hamLines[1], { opacity: 0, x: 8, duration: 0.2 });
+                gsap.to(hamLines[2], { rotation: -45, y: -6.5, width: '1.5rem', duration: 0.3, ease: 'power2.inOut' });
+            }
+            function closeMenu() {
+                menuOpen = false;
+                document.body.style.overflow = '';
+                gsap.to('.mob-link', { x: -24, opacity: 0, duration: 0.25, stagger: 0.04, ease: 'power2.in' });
+                gsap.to(mobileMenu, { opacity: 0, duration: 0.3, ease: 'power2.in', delay: 0.15, onComplete: () => gsap.set(mobileMenu, { pointerEvents: 'none' }) });
+                gsap.to(hamLines[0], { rotation: 0, y: 0, duration: 0.3, ease: 'power2.inOut' });
+                gsap.to(hamLines[1], { opacity: 1, x: 0, duration: 0.2, delay: 0.1 });
+                gsap.to(hamLines[2], { rotation: 0, y: 0, width: '1rem', duration: 0.3, ease: 'power2.inOut' });
+            }
+            menuBtn.addEventListener('click', () => menuOpen ? closeMenu() : openMenu());
+            menuClose.addEventListener('click', closeMenu);
+            document.querySelectorAll('.mob-link').forEach(link => {
+                if (link.tagName === 'A') link.addEventListener('click', closeMenu);
+            });
+
+            // ─── G-LINE MODAL ─────────────────────────────────────────────────
+            const glineModal = document.getElementById('gline-modal');
+            const glinePanel = document.getElementById('gline-panel');
+            function openGline() {
+                gsap.set(glineModal, { pointerEvents: 'auto' });
+                gsap.to(glineModal, { opacity: 1, duration: 0.3, ease: 'power2.out' });
+                gsap.fromTo(glinePanel, { scale: 0.94, y: 20 }, { scale: 1, y: 0, duration: 0.4, ease: 'back.out(1.4)' });
+                document.body.style.overflow = 'hidden';
+            }
+            function closeGline() {
+                gsap.to(glineModal, { opacity: 0, duration: 0.25, ease: 'power2.in', onComplete: () => {
+                    gsap.set(glineModal, { pointerEvents: 'none' });
+                    document.body.style.overflow = '';
+                }});
+            }
+            document.getElementById('gline-close').addEventListener('click', closeGline);
+            document.querySelectorAll('.gline-close-trigger').forEach(el => el.addEventListener('click', closeGline));
+            glineModal.addEventListener('click', (e) => { if (e.target === glineModal) closeGline(); });
+            document.querySelectorAll('.gline-trigger').forEach(el => el.addEventListener('click', (e) => { e.preventDefault(); openGline(); }));
+
+            document.getElementById('gline-form').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const btn = e.target.querySelector('.gline-submit-btn');
+                btn.querySelector('.gline-btn-text').classList.add('hidden');
+                btn.querySelector('.gline-btn-loading').classList.remove('hidden');
+                btn.disabled = true;
+                const payload = {
+                    name: document.getElementById('gline-your-name').value,
+                    referralName: document.getElementById('gline-who').value,
+                    relationship: document.getElementById('gline-relationship').value,
+                    urgency: document.getElementById('gline-urgency').value,
+                    situation: document.getElementById('gline-situation').value,
+                };
+                try { await fetch('/api/referral', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) }); } catch (_) {}
+                gsap.to('.gline-success', { y: '0%', duration: 0.8, ease: 'power4.out' });
+            });
+
+            // ─── JOIN FORM ────────────────────────────────────────────────────
+            document.getElementById('main-join-form').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const btn = e.target.querySelector('.submit-btn');
+                btn.querySelector('.btn-text').classList.add('hidden');
+                btn.querySelector('.btn-loading').classList.remove('hidden');
+                btn.disabled = true;
+                const payload = {
+                    name: document.getElementById('name').value,
+                    email: document.getElementById('email').value,
+                    phone: document.getElementById('phone').value,
+                    city: document.getElementById('city').value,
+                    interest: document.getElementById('interest').value,
+                    message: document.getElementById('message').value,
+                };
+                try {
+                    const res = await fetch('/api/join', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+                    if (!res.ok) throw new Error();
+                } catch (_) {}
+                gsap.to('.success-stamp', { y: '0%', duration: 0.8, ease: 'power4.out' });
+            });
+
+            // ─── PAGE ANIMATIONS ──────────────────────────────────────────────
+            gsap.utils.toArray('.reveal-el').forEach(el => {
+                gsap.fromTo(el, { opacity: 0, y: 30 }, {
+                    opacity: 1, y: 0, duration: 1, ease: 'power3.out',
+                    scrollTrigger: { trigger: el, start: 'top 88%' }
+                });
+            });
+
+            // Tier cards
+            gsap.utils.toArray('.tier-card').forEach((card, i) => {
+                gsap.to(card, {
+                    opacity: 1, duration: 0.8, ease: 'power2.out',
+                    scrollTrigger: { trigger: card, start: 'top 85%' },
+                    delay: i * 0.1
+                });
+            });
+
+            // Sponsor cards
+            gsap.utils.toArray('.sponsor-card').forEach((card, i) => {
+                gsap.to(card, {
+                    opacity: 1, duration: 0.8, ease: 'power2.out',
+                    scrollTrigger: { trigger: card, start: 'top 85%' },
+                    delay: (i % 2) * 0.12
+                });
+            });
+
+            // Join form reveal
+            gsap.to(".form-container", {
+                clipPath: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)",
+                duration: 1.5, ease: "power4.inOut",
+                scrollTrigger: { trigger: "#join-form", start: "top 60%" }
+            });
+
+            // Footer
+            gsap.to(".final-line", { x: "0%", duration: 1.5, ease: "power2.out", scrollTrigger: { trigger: "footer", start: "top 80%" } });
+            gsap.to(".footer-promise", { color: "#D4AF37", opacity: 1, duration: 1, scrollTrigger: { trigger: "footer", start: "top 60%" } });
+        });
+    </script>
+</body>
+</html>

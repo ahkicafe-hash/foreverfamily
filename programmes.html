@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Programmes | FOREVER FAMILY</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+    <style>
+        :root { --bg: #0d0d0d; --text: #F5F2EB; --gold: #D4AF37; --stone: #2A2A2A; }
+        body { background-color: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; overflow-x: hidden; -webkit-font-smoothing: antialiased; }
+        h1, h2, h3, h4, .font-condensed { font-family: 'Oswald', sans-serif; text-transform: uppercase; line-height: 1.1; }
+        .bg-gold { background-color: var(--gold); }
+        .text-gold { color: var(--gold); }
+        .border-gold { border-color: var(--gold); }
+        .bg-stone-custom { background-color: var(--stone); }
+        .border-stone { border-color: var(--stone); }
+        .grain-overlay {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            pointer-events: none; z-index: 9999; opacity: 0.05;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+        img.doc-style { filter: grayscale(80%) contrast(120%) brightness(90%); transition: filter 0.5s ease; }
+        img.doc-style:hover { filter: grayscale(20%) contrast(110%) brightness(100%); }
+        .disc-line { width: 0; height: 1px; background: var(--stone); transition: width 0.6s ease; }
+        .discipline-row:hover .disc-line { width: 100%; }
+    </style>
+</head>
+<body class="relative">
+
+    <div class="grain-overlay"></div>
+
+    <!-- NAV -->
+    <nav class="fixed top-0 left-0 w-full p-6 z-50 flex justify-between items-center mix-blend-difference pointer-events-none">
+        <div class="font-condensed text-2xl tracking-widest pointer-events-auto">
+            <a href="index.html">FOREVER FAMILY</a>
+        </div>
+        <div class="hidden md:flex gap-8 text-sm font-medium tracking-widest uppercase pointer-events-auto">
+            <a href="about.html" class="hover:text-gold transition-colors">About</a>
+            <a href="programmes.html" class="text-gold">Programmes</a>
+            <a href="membership.html" class="hover:text-gold transition-colors">Membership</a>
+            <a href="membership.html#join-form" class="hover:text-gold transition-colors">Join</a>
+            <a href="portal.html" class="hover:text-gold transition-colors border border-stone px-3 py-1 hover:border-gold">Member Portal</a>
+        </div>
+        <button id="mobile-menu-btn" class="flex md:hidden flex-col justify-center items-end gap-[5px] w-8 h-8 pointer-events-auto" aria-label="Open navigation">
+            <span class="ham-line block bg-white h-[1.5px] w-6 origin-center"></span>
+            <span class="ham-line block bg-white h-[1.5px] w-6 origin-center"></span>
+            <span class="ham-line block bg-white h-[1.5px] w-4 origin-center"></span>
+        </button>
+    </nav>
+
+    <!-- MOBILE MENU -->
+    <div id="mobile-menu" class="fixed inset-0 z-[9996] bg-[#0d0d0d] flex flex-col px-8 pt-7 pb-10 pointer-events-none overflow-y-auto" style="opacity:0">
+        <div class="flex justify-between items-center mb-12">
+            <div class="font-condensed text-2xl tracking-widest">FOREVER FAMILY</div>
+            <button id="mobile-menu-close" class="flex flex-col justify-center items-center w-8 h-8" aria-label="Close navigation">
+                <span class="block bg-white h-[1.5px] w-6 origin-center" style="transform:rotate(45deg) translateY(0.75px)"></span>
+                <span class="block bg-white h-[1.5px] w-6 origin-center" style="transform:rotate(-45deg) translateY(-0.75px)"></span>
+            </button>
+        </div>
+        <div class="border-b border-stone mb-6 pb-3">
+            <span class="text-[10px] text-stone tracking-[0.3em] uppercase">Navigation</span>
+        </div>
+        <nav class="flex flex-col flex-grow">
+            <a href="about.html"      class="mob-link font-condensed text-[14vw] text-white hover:text-gold transition-colors leading-none py-3 border-b border-stone border-opacity-30" style="opacity:0;transform:translateX(-24px)">ABOUT</a>
+            <a href="programmes.html" class="mob-link font-condensed text-[14vw] text-gold leading-none py-3 border-b border-stone border-opacity-30" style="opacity:0;transform:translateX(-24px)">PROGRAMMES</a>
+            <a href="membership.html" class="mob-link font-condensed text-[14vw] text-white hover:text-gold transition-colors leading-none py-3 border-b border-stone border-opacity-30" style="opacity:0;transform:translateX(-24px)">MEMBERSHIP</a>
+            <a href="membership.html#join-form" class="mob-link font-condensed text-[14vw] text-gold leading-none py-3" style="opacity:0;transform:translateX(-24px)">JOIN</a>
+        </nav>
+        <div class="border-t border-stone pt-6 mt-6 flex justify-between items-end">
+            <a href="portal.html" class="mob-link text-xs tracking-widest uppercase text-stone hover:text-gold transition-colors" style="opacity:0;transform:translateX(-24px)">Member Portal →</a>
+            <span class="text-[10px] text-stone tracking-widest uppercase opacity-40">PIA · FFCA · SOS</span>
+        </div>
+    </div>
+
+    <!-- PAGE HEADER -->
+    <section class="pt-48 pb-24 px-6 md:px-12 max-w-7xl mx-auto">
+        <div class="reveal-el text-xs text-gold tracking-widest uppercase mb-6 border-b border-stone pb-4 inline-block">WHAT WE DELIVER</div>
+        <h1 class="reveal-el font-condensed text-[14vw] md:text-[9vw] leading-none text-white mb-8">OUR<br><span class="text-gold">PROGRAMMES.</span></h1>
+        <p class="reveal-el text-lg md:text-xl text-gray-400 max-w-2xl leading-relaxed">Three active programmes, one pipeline. Each is designed to turn commitment into capability — and capability into community protection.</p>
+    </section>
+
+    <!-- SEC: 12-POINT PROGRAMME -->
+    <section id="twelve-point" class="py-24 bg-[#0a0a0a] border-t border-stone">
+        <div class="px-6 md:px-12 max-w-7xl mx-auto">
+            <div class="reveal-el text-xs text-gold tracking-widest uppercase mb-6 border-b border-stone pb-4 inline-block">PROGRAMME 01 — FFCA</div>
+            <div class="flex flex-col md:flex-row justify-between items-start gap-12 mb-20">
+                <h2 class="reveal-el font-condensed text-5xl md:text-7xl">THE 12-POINT<br><span class="text-gold">PROGRAMME.</span></h2>
+                <div class="reveal-el max-w-lg">
+                    <p class="text-gray-400 leading-relaxed mb-6">60 assessments. 12 disciplines. One standard. The 12-Point Programme is the backbone of FFCA training — a structured curriculum that prepares Steppers for real-world community protection. Every assessment is graded, every discipline must be passed before deployment.</p>
+                    <div class="flex gap-6 text-sm">
+                        <div class="text-center">
+                            <div class="font-condensed text-4xl text-gold">60</div>
+                            <div class="text-[10px] tracking-widest text-stone uppercase mt-1">Assessments</div>
+                        </div>
+                        <div class="w-[1px] bg-stone"></div>
+                        <div class="text-center">
+                            <div class="font-condensed text-4xl text-gold">12</div>
+                            <div class="text-[10px] tracking-widest text-stone uppercase mt-1">Disciplines</div>
+                        </div>
+                        <div class="w-[1px] bg-stone"></div>
+                        <div class="text-center">
+                            <div class="font-condensed text-4xl text-gold">5</div>
+                            <div class="text-[10px] tracking-widest text-stone uppercase mt-1">Per Discipline</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Disciplines Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-0 border-t border-l border-stone">
+
+                <div class="discipline-row border-r border-b border-stone p-8 group opacity-0">
+                    <div class="flex items-start gap-6">
+                        <div class="font-condensed text-4xl text-stone group-hover:text-gold transition-colors duration-300 w-10 flex-shrink-0">01</div>
+                        <div class="flex-grow">
+                            <h3 class="font-condensed text-2xl mb-2 group-hover:text-gold transition-colors duration-300">Emergency Response & First Aid</h3>
+                            <p class="text-gray-400 text-sm leading-relaxed">Trauma management, CPR, wound care, and crisis stabilisation. Every Stepper is expected to respond in the first 10 minutes of any medical emergency.</p>
+                            <div class="disc-line mt-4"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="discipline-row border-r border-b border-stone p-8 group opacity-0">
+                    <div class="flex items-start gap-6">
+                        <div class="font-condensed text-4xl text-stone group-hover:text-gold transition-colors duration-300 w-10 flex-shrink-0">02</div>
+                        <div class="flex-grow">
+                            <h3 class="font-condensed text-2xl mb-2 group-hover:text-gold transition-colors duration-300">Legal Rights & Civil Liberties</h3>
+                            <p class="text-gray-400 text-sm leading-relaxed">Stop and search, citizens' arrest, safeguarding law, and your rights when operating in public. Steppers understand the legal landscape before they step into it.</p>
+                            <div class="disc-line mt-4"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="discipline-row border-r border-b border-stone p-8 group opacity-0">
+                    <div class="flex items-start gap-6">
+                        <div class="font-condensed text-4xl text-stone group-hover:text-gold transition-colors duration-300 w-10 flex-shrink-0">03</div>
+                        <div class="flex-grow">
+                            <h3 class="font-condensed text-2xl mb-2 group-hover:text-gold transition-colors duration-300">Tactical Awareness & Movement</h3>
+                            <p class="text-gray-400 text-sm leading-relaxed">Patrol formations, environmental scanning, situational awareness, and safe positioning. Not combat — precision and presence. Knowing where to be and where not to be.</p>
+                            <div class="disc-line mt-4"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="discipline-row border-r border-b border-stone p-8 group opacity-0">
+                    <div class="flex items-start gap-6">
+                        <div class="font-condensed text-4xl text-stone group-hover:text-gold transition-colors duration-300 w-10 flex-shrink-0">04</div>
+                        <div class="flex-grow">
+                            <h3 class="font-condensed text-2xl mb-2 group-hover:text-gold transition-colors duration-300">Trauma-Informed Communication</h3>
+                            <p class="text-gray-400 text-sm leading-relaxed">Approaching individuals in crisis with language that de-escalates. Recognising symptoms of trauma, abuse, and mental health distress. Listening as an active intervention.</p>
+                            <div class="disc-line mt-4"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="discipline-row border-r border-b border-stone p-8 group opacity-0">
+                    <div class="flex items-start gap-6">
+                        <div class="font-condensed text-4xl text-stone group-hover:text-gold transition-colors duration-300 w-10 flex-shrink-0">05</div>
+                        <div class="flex-grow">
+                            <h3 class="font-condensed text-2xl mb-2 group-hover:text-gold transition-colors duration-300">Child Safeguarding & Exploitation</h3>
+                            <p class="text-gray-400 text-sm leading-relaxed">Recognising grooming, county lines, criminal exploitation, and trafficking indicators. Reporting protocols and immediate referral pathways. Mandatory knowledge for every Stepper.</p>
+                            <div class="disc-line mt-4"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="discipline-row border-r border-b border-stone p-8 group opacity-0">
+                    <div class="flex items-start gap-6">
+                        <div class="font-condensed text-4xl text-stone group-hover:text-gold transition-colors duration-300 w-10 flex-shrink-0">06</div>
+                        <div class="flex-grow">
+                            <h3 class="font-condensed text-2xl mb-2 group-hover:text-gold transition-colors duration-300">De-escalation & Conflict Resolution</h3>
+                            <p class="text-gray-400 text-sm leading-relaxed">Verbal and non-verbal techniques for defusing volatile situations. Understanding trigger points, group dynamics, and how to insert a calming presence into chaos.</p>
+                            <div class="disc-line mt-4"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="discipline-row border-r border-b border-stone p-8 group opacity-0">
+                    <div class="flex items-start gap-6">
+                        <div class="font-condensed text-4xl text-stone group-hover:text-gold transition-colors duration-300 w-10 flex-shrink-0">07</div>
+                        <div class="flex-grow">
+                            <h3 class="font-condensed text-2xl mb-2 group-hover:text-gold transition-colors duration-300">Mental Health First Response</h3>
+                            <p class="text-gray-400 text-sm leading-relaxed">Identifying signs of psychosis, suicidal ideation, and acute distress. Stabilisation techniques and when to call specialist services. Crisis management without clinical training.</p>
+                            <div class="disc-line mt-4"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="discipline-row border-r border-b border-stone p-8 group opacity-0">
+                    <div class="flex items-start gap-6">
+                        <div class="font-condensed text-4xl text-stone group-hover:text-gold transition-colors duration-300 w-10 flex-shrink-0">08</div>
+                        <div class="flex-grow">
+                            <h3 class="font-condensed text-2xl mb-2 group-hover:text-gold transition-colors duration-300">Physical Readiness & Self-Defence</h3>
+                            <p class="text-gray-400 text-sm leading-relaxed">Physical conditioning, defensive posture, and non-aggressive restraint principles. Not about fighting — about being physically prepared and remaining safe during volatile encounters.</p>
+                            <div class="disc-line mt-4"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="discipline-row border-r border-b border-stone p-8 group opacity-0">
+                    <div class="flex items-start gap-6">
+                        <div class="font-condensed text-4xl text-stone group-hover:text-gold transition-colors duration-300 w-10 flex-shrink-0">09</div>
+                        <div class="flex-grow">
+                            <h3 class="font-condensed text-2xl mb-2 group-hover:text-gold transition-colors duration-300">Community Intelligence & Reporting</h3>
+                            <p class="text-gray-400 text-sm leading-relaxed">Structured observation, pattern recognition, and intelligence-led community safety. How to document, report, and share information without compromising sources or endangering lives.</p>
+                            <div class="disc-line mt-4"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="discipline-row border-r border-b border-stone p-8 group opacity-0">
+                    <div class="flex items-start gap-6">
+                        <div class="font-condensed text-4xl text-stone group-hover:text-gold transition-colors duration-300 w-10 flex-shrink-0">10</div>
+                        <div class="flex-grow">
+                            <h3 class="font-condensed text-2xl mb-2 group-hover:text-gold transition-colors duration-300">Crisis Communication & Media</h3>
+                            <p class="text-gray-400 text-sm leading-relaxed">How to communicate in a crisis without escalating. Media awareness, public statements, and protecting community members from unwanted exposure. Silence is sometimes the right message.</p>
+                            <div class="disc-line mt-4"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="discipline-row border-r border-b border-stone p-8 group opacity-0">
+                    <div class="flex items-start gap-6">
+                        <div class="font-condensed text-4xl text-stone group-hover:text-gold transition-colors duration-300 w-10 flex-shrink-0">11</div>
+                        <div class="flex-grow">
+                            <h3 class="font-condensed text-2xl mb-2 group-hover:text-gold transition-colors duration-300">Institutional Navigation & Advocacy</h3>
+                            <p class="text-gray-400 text-sm leading-relaxed">Working with — and around — systems that fail communities. Police, social services, councils, schools. How to advocate for someone inside institutions not designed for them.</p>
+                            <div class="disc-line mt-4"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="discipline-row border-r border-b border-stone p-8 group opacity-0">
+                    <div class="flex items-start gap-6">
+                        <div class="font-condensed text-4xl text-stone group-hover:text-gold transition-colors duration-300 w-10 flex-shrink-0">12</div>
+                        <div class="flex-grow">
+                            <h3 class="font-condensed text-2xl mb-2 group-hover:text-gold transition-colors duration-300">Leadership & Accountability</h3>
+                            <p class="text-gray-400 text-sm leading-relaxed">Leading a patrol, mentoring new Steppers, writing operational reports, and holding yourself to the PIA code. The final discipline. You don't just pass it — you live it.</p>
+                            <div class="disc-line mt-4"></div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="mt-16 flex flex-col md:flex-row gap-6 items-center justify-between border-t border-stone pt-8">
+                <p class="text-gray-400 text-sm max-w-lg">FFCA sessions run monthly. Access is open to Bronze members and above. Each session covers 2–3 disciplines in practical, scenario-based training.</p>
+                <a href="membership.html" class="flex-shrink-0 inline-block px-10 py-4 bg-gold text-[#0d0d0d] font-condensed text-xl tracking-widest hover:bg-white transition-colors duration-300">JOIN TO ACCESS</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- SEC: FFCA MONTHLY SESSIONS -->
+    <section id="ffca-sessions" class="py-24 px-6 md:px-12 border-t border-stone">
+        <div class="max-w-7xl mx-auto">
+            <div class="reveal-el text-xs text-gold tracking-widest uppercase mb-6 border-b border-stone pb-4 inline-block">PROGRAMME 02 — ONGOING</div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-16 items-start">
+                <div>
+                    <h2 class="reveal-el font-condensed text-5xl md:text-6xl mb-8">FFCA MONTHLY<br><span class="text-gold">SESSIONS.</span></h2>
+                    <p class="reveal-el text-gray-400 leading-relaxed mb-8">Beyond the 12-Point Programme, FFCA runs structured monthly gatherings open to all investing members. These are not meetings — they are active training evenings built on scenario-based learning, peer review, and accountability.</p>
+                    <p class="reveal-el text-gray-400 leading-relaxed mb-12">Sessions are held at secure community venues across our operational zones. What happens inside stays inside. What you learn carries out with you.</p>
+                    <a href="membership.html" class="reveal-el inline-block px-10 py-4 border border-gold text-gold font-condensed text-xl tracking-widest hover:bg-gold hover:text-[#0d0d0d] transition-colors duration-300">BRONZE TIER ONWARD</a>
+                </div>
+
+                <div class="space-y-0">
+                    <div class="session-item border-b border-stone py-8 opacity-0">
+                        <div class="flex items-start gap-6">
+                            <div class="w-12 h-12 border border-stone flex items-center justify-center flex-shrink-0 mt-1">
+                                <div class="w-2 h-2 bg-gold rounded-full"></div>
+                            </div>
+                            <div>
+                                <h4 class="font-condensed text-2xl mb-2">STRUCTURED TRAINING</h4>
+                                <p class="text-gray-400 text-sm leading-relaxed">Each session focuses on 2–3 disciplines from the 12-Point Programme. Practical, scenario-based exercises run alongside classroom-style briefings.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="session-item border-b border-stone py-8 opacity-0">
+                        <div class="flex items-start gap-6">
+                            <div class="w-12 h-12 border border-stone flex items-center justify-center flex-shrink-0 mt-1">
+                                <div class="w-2 h-2 bg-gold rounded-full"></div>
+                            </div>
+                            <div>
+                                <h4 class="font-condensed text-2xl mb-2">PEER ACCOUNTABILITY</h4>
+                                <p class="text-gray-400 text-sm leading-relaxed">Steppers review each other's field conduct from the previous month. No hierarchy beyond experience. Everyone is held to the same PIA-certified standard.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="session-item border-b border-stone py-8 opacity-0">
+                        <div class="flex items-start gap-6">
+                            <div class="w-12 h-12 border border-stone flex items-center justify-center flex-shrink-0 mt-1">
+                                <div class="w-2 h-2 bg-gold rounded-full"></div>
+                            </div>
+                            <div>
+                                <h4 class="font-condensed text-2xl mb-2">COMMUNITY INTELLIGENCE</h4>
+                                <p class="text-gray-400 text-sm leading-relaxed">What's happening in your zone? Sessions include a structured intelligence share — patterns, concerns, individuals at risk. Operational, confidential, and purposeful.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="session-item py-8 opacity-0">
+                        <div class="flex items-start gap-6">
+                            <div class="w-12 h-12 border border-stone flex items-center justify-center flex-shrink-0 mt-1">
+                                <div class="w-2 h-2 bg-gold rounded-full"></div>
+                            </div>
+                            <div>
+                                <h4 class="font-condensed text-2xl mb-2">OPEN TO MEMBERS</h4>
+                                <p class="text-gray-400 text-sm leading-relaxed">Bronze members and above attend as observers and participants. You do not need to be a Stepper to be in the room. Witnessing it is part of understanding it.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SEC: SOS CRISIS INTERVENTION -->
+    <section id="sos" class="py-24 px-6 md:px-12 bg-[#0a0a0a] border-t border-stone">
+        <div class="max-w-7xl mx-auto">
+            <div class="reveal-el text-xs text-gold tracking-widest uppercase mb-6 border-b border-stone pb-4 inline-block">PROGRAMME 03 — SOS</div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+                <div>
+                    <h2 class="reveal-el font-condensed text-5xl md:text-6xl mb-8">CRISIS<br><span class="text-gold">INTERVENTION.</span></h2>
+                    <p class="reveal-el text-gray-400 leading-relaxed mb-6">The Safe Operations Squad is the deployment arm of Forever Family. Only certified Steppers — those who have completed the full 12-Point Programme — are cleared to operate with the SOS.</p>
+                    <p class="reveal-el text-gray-400 leading-relaxed mb-8">We respond to community safety threats, domestic crises, youth exploitation alerts, and G-Line referrals. Our response time target is under 4 hours for standard referrals. Under 1 hour for immediate.</p>
+                    <div class="reveal-el grid grid-cols-2 gap-4 mb-10">
+                        <div class="bg-[#111] border border-stone p-5">
+                            <div class="font-condensed text-3xl text-gold mb-1">&lt;4hr</div>
+                            <div class="text-[10px] tracking-widest text-stone uppercase">Standard Response</div>
+                        </div>
+                        <div class="bg-[#111] border border-stone p-5">
+                            <div class="font-condensed text-3xl text-gold mb-1">&lt;1hr</div>
+                            <div class="text-[10px] tracking-widest text-stone uppercase">Immediate Response</div>
+                        </div>
+                        <div class="bg-[#111] border border-stone p-5">
+                            <div class="font-condensed text-3xl text-gold mb-1">24/7</div>
+                            <div class="text-[10px] tracking-widest text-stone uppercase">G-Line Monitored</div>
+                        </div>
+                        <div class="bg-[#111] border border-stone p-5">
+                            <div class="font-condensed text-3xl text-gold mb-1">4+</div>
+                            <div class="text-[10px] tracking-widest text-stone uppercase">Cities Covered</div>
+                        </div>
+                    </div>
+                    <button class="gline-trigger reveal-el inline-block px-10 py-4 bg-gold text-[#0d0d0d] font-condensed text-xl tracking-widest hover:bg-white transition-colors duration-300 cursor-pointer">REQUEST G-LINE ACCESS</button>
+                </div>
+
+                <div class="space-y-6">
+                    <div class="sos-item bg-[#111] border border-stone p-8 relative opacity-0">
+                        <div class="absolute top-0 left-0 w-6 h-6 border-t-2 border-l-2 border-stone m-3 pointer-events-none"></div>
+                        <div class="text-xs text-gold tracking-widest uppercase mb-3">TYPE A</div>
+                        <h4 class="font-condensed text-2xl mb-3">COMMUNITY SAFETY PATROLS</h4>
+                        <p class="text-gray-400 text-sm leading-relaxed">Certified Steppers conduct regular patrols in identified hotspot areas. Visible, consistent, and purposeful. We are not vigilantes — we are a documented, trained presence that deters harm.</p>
+                    </div>
+                    <div class="sos-item bg-[#111] border border-stone p-8 relative opacity-0">
+                        <div class="absolute top-0 left-0 w-6 h-6 border-t-2 border-l-2 border-stone m-3 pointer-events-none"></div>
+                        <div class="text-xs text-gold tracking-widest uppercase mb-3">TYPE B</div>
+                        <h4 class="font-condensed text-2xl mb-3">WELFARE CHECKS & G-LINE RESPONSE</h4>
+                        <p class="text-gray-400 text-sm leading-relaxed">When a G-Line referral is received, an SOS team is dispatched within hours. Two minimum Steppers, trained in trauma-informed communication, make contact and assess the situation.</p>
+                    </div>
+                    <div class="sos-item bg-[#111] border border-stone p-8 relative opacity-0">
+                        <div class="absolute top-0 left-0 w-6 h-6 border-t-2 border-l-2 border-stone m-3 pointer-events-none"></div>
+                        <div class="text-xs text-gold tracking-widest uppercase mb-3">TYPE C</div>
+                        <h4 class="font-condensed text-2xl mb-3">INTELLIGENCE-LED OPERATIONS</h4>
+                        <p class="text-gray-400 text-sm leading-relaxed">Based on community intelligence gathered through sessions and reports, SOS plans and executes targeted operations to disrupt, deter, or prevent harm. Details remain classified. Results are reported to Silver members and above.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- BECOME A STEPPER CTA -->
+    <section class="py-24 px-6 md:px-12 border-t border-stone">
+        <div class="max-w-7xl mx-auto">
+            <div class="bg-[#111] border border-gold p-12 md:p-20 relative text-center">
+                <div class="absolute top-0 left-0 w-8 h-8 border-t-2 border-l-2 border-gold m-4"></div>
+                <div class="absolute top-0 right-0 w-8 h-8 border-t-2 border-r-2 border-gold m-4"></div>
+                <div class="absolute bottom-0 left-0 w-8 h-8 border-b-2 border-l-2 border-gold m-4"></div>
+                <div class="absolute bottom-0 right-0 w-8 h-8 border-b-2 border-r-2 border-gold m-4"></div>
+                <div class="reveal-el text-xs text-gold tracking-widest uppercase mb-6">YOUR NEXT STEP</div>
+                <h2 class="reveal-el font-condensed text-5xl md:text-7xl mb-6">BECOME A <span class="text-gold">STEPPER.</span></h2>
+                <p class="reveal-el text-gray-400 max-w-xl mx-auto mb-10 leading-relaxed">The 12-Point Programme doesn't start until you do. Every certified Stepper started with a single decision. That decision begins with a membership, and a message.</p>
+                <div class="reveal-el flex flex-col sm:flex-row gap-6 justify-center">
+                    <a href="membership.html" class="inline-block px-12 py-5 bg-gold text-[#0d0d0d] font-condensed text-2xl tracking-widest hover:bg-white transition-colors duration-300">INVEST AS MEMBER</a>
+                    <a href="membership.html#join-form" class="inline-block px-12 py-5 border border-stone text-white font-condensed text-2xl tracking-widest hover:border-gold hover:text-gold transition-colors duration-300">SEND A MESSAGE</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="py-24 px-6 md:px-12 bg-[#050505] relative overflow-hidden border-t border-stone flex flex-col items-center">
+        <h2 class="font-condensed text-[8vw] md:text-[6vw] text-stone opacity-30 text-center leading-none mb-12 footer-promise">FOREVER MEANS WE STAY.</h2>
+        <div class="flex gap-8 text-xs tracking-widest uppercase text-gray-500 mb-12 z-10 relative">
+            <a href="#" class="hover:text-gold transition-colors">Instagram</a>
+            <a href="#" class="hover:text-gold transition-colors">Patreon</a>
+            <a href="membership.html#join-form" class="hover:text-gold transition-colors">Join</a>
+            <a href="#" class="hover:text-gold transition-colors">Privacy</a>
+        </div>
+        <div class="text-xs tracking-widest text-stone uppercase mb-8 z-10 relative text-center">
+            PIA — Public &nbsp;|&nbsp; FFCA — Confidential &nbsp;|&nbsp; SOS — Classified
+        </div>
+        <div class="w-full max-w-7xl h-[1px] bg-stone relative overflow-hidden z-10">
+            <div class="absolute top-0 left-0 h-full bg-gold w-full transform -translate-x-full final-line"></div>
+        </div>
+    </footer>
+
+    <!-- G-LINE MODAL -->
+    <div id="gline-modal" class="fixed inset-0 z-[9998] bg-[#0d0d0d] flex items-center justify-center p-6 pointer-events-none opacity-0">
+        <div id="gline-panel" class="w-full max-w-2xl bg-[#111] border border-gold p-8 md:p-12 relative overflow-hidden">
+            <div class="absolute top-0 left-0 w-8 h-8 border-t-2 border-l-2 border-gold m-4 pointer-events-none"></div>
+            <div class="absolute top-0 right-0 w-8 h-8 border-t-2 border-r-2 border-gold m-4 pointer-events-none"></div>
+            <div class="absolute bottom-0 left-0 w-8 h-8 border-b-2 border-l-2 border-gold m-4 pointer-events-none"></div>
+            <div class="absolute bottom-0 right-0 w-8 h-8 border-b-2 border-r-2 border-gold m-4 pointer-events-none"></div>
+            <button id="gline-close" class="absolute top-6 right-6 text-stone hover:text-gold transition-colors text-xs tracking-widest uppercase z-10">✕ CLOSE</button>
+            <div class="text-xs text-gold tracking-widest uppercase mb-2">EMERGENCY REFERRAL</div>
+            <h2 class="font-condensed text-4xl md:text-5xl mb-2">THE <span class="text-gold">G-LINE</span></h2>
+            <p class="text-gray-400 text-sm mb-8 max-w-lg">Know someone who needs help? This is how you reach us. We respond within 24 hours. For immediate life-threatening situations, always call 999 first.</p>
+            <form id="gline-form" class="space-y-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="relative">
+                        <input type="text" id="gline-your-name" required class="w-full bg-transparent border-b border-stone py-3 text-white focus:outline-none focus:border-gold transition-colors peer" placeholder=" ">
+                        <label for="gline-your-name" class="absolute left-0 top-3 text-stone uppercase tracking-widest text-xs transition-all peer-focus:-top-4 peer-focus:text-gold peer-focus:text-[10px] peer-not-placeholder-shown:-top-4 peer-not-placeholder-shown:text-gold peer-not-placeholder-shown:text-[10px]">Your Name</label>
+                    </div>
+                    <div class="relative">
+                        <input type="text" id="gline-who" required class="w-full bg-transparent border-b border-stone py-3 text-white focus:outline-none focus:border-gold transition-colors peer" placeholder=" ">
+                        <label for="gline-who" class="absolute left-0 top-3 text-stone uppercase tracking-widest text-xs transition-all peer-focus:-top-4 peer-focus:text-gold peer-focus:text-[10px] peer-not-placeholder-shown:-top-4 peer-not-placeholder-shown:text-gold peer-not-placeholder-shown:text-[10px]">Who Needs Help</label>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="relative">
+                        <input type="text" id="gline-relationship" class="w-full bg-transparent border-b border-stone py-3 text-white focus:outline-none focus:border-gold transition-colors peer" placeholder=" ">
+                        <label for="gline-relationship" class="absolute left-0 top-3 text-stone uppercase tracking-widest text-xs transition-all peer-focus:-top-4 peer-focus:text-gold peer-focus:text-[10px] peer-not-placeholder-shown:-top-4 peer-not-placeholder-shown:text-gold peer-not-placeholder-shown:text-[10px]">Your Relationship to Them</label>
+                    </div>
+                    <div class="relative">
+                        <select id="gline-urgency" required class="w-full bg-transparent border-b border-stone py-3 text-stone uppercase tracking-widest text-xs focus:outline-none focus:border-gold focus:text-white transition-colors appearance-none rounded-none">
+                            <option value="" disabled selected>Urgency Level</option>
+                            <option value="immediate" class="bg-[#111] text-white">Immediate — Within hours</option>
+                            <option value="urgent" class="bg-[#111] text-white">Urgent — Within 24 hours</option>
+                            <option value="ongoing" class="bg-[#111] text-white">Ongoing — Developing situation</option>
+                            <option value="preventive" class="bg-[#111] text-white">Preventive — Before it escalates</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="relative">
+                    <textarea id="gline-situation" rows="4" required class="w-full bg-transparent border-b border-stone py-3 text-white focus:outline-none focus:border-gold transition-colors peer resize-none" placeholder=" "></textarea>
+                    <label for="gline-situation" class="absolute left-0 top-3 text-stone uppercase tracking-widest text-xs transition-all peer-focus:-top-4 peer-focus:text-gold peer-focus:text-[10px] peer-not-placeholder-shown:-top-4 peer-not-placeholder-shown:text-gold peer-not-placeholder-shown:text-[10px]">Describe the Situation</label>
+                </div>
+                <div id="gline-error" class="hidden text-sm text-red-400 tracking-widest uppercase text-center py-1">Something went wrong. Please try again.</div>
+                <button type="submit" class="w-full px-12 py-4 bg-gold text-[#0d0d0d] font-condensed text-xl tracking-widest hover:bg-white transition-colors duration-300 gline-submit-btn">
+                    <span class="gline-btn-text">SEND REFERRAL</span>
+                    <span class="gline-btn-loading hidden">SENDING...</span>
+                </button>
+            </form>
+            <div class="gline-success absolute inset-0 bg-[#0d0d0d] flex items-center justify-center z-20 translate-y-full">
+                <div class="text-center p-8">
+                    <div class="w-16 h-16 border-2 border-gold rounded-full flex items-center justify-center mx-auto mb-6">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    </div>
+                    <h3 class="font-condensed text-3xl text-gold mb-2">REFERRAL RECEIVED.</h3>
+                    <p class="text-gray-400 text-sm tracking-widest uppercase mt-2">We respond within 24 hours.<br>For emergencies, call 999.</p>
+                    <button class="mt-8 text-xs tracking-widest text-gold uppercase hover:text-white transition-colors gline-close-trigger">CLOSE</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            gsap.registerPlugin(ScrollTrigger);
+
+            // ─── MOBILE MENU ─────────────────────────────────────────────────
+            const mobileMenu = document.getElementById('mobile-menu');
+            const menuBtn    = document.getElementById('mobile-menu-btn');
+            const menuClose  = document.getElementById('mobile-menu-close');
+            const hamLines   = menuBtn.querySelectorAll('.ham-line');
+            let menuOpen     = false;
+
+            function openMenu() {
+                menuOpen = true;
+                document.body.style.overflow = 'hidden';
+                gsap.set(mobileMenu, { pointerEvents: 'auto' });
+                gsap.to(mobileMenu, { opacity: 1, duration: 0.25, ease: 'power2.out' });
+                gsap.to('.mob-link', { x: 0, opacity: 1, duration: 0.55, stagger: 0.07, ease: 'power3.out', delay: 0.1 });
+                gsap.to(hamLines[0], { rotation: 45,  y:  6.5, duration: 0.3, ease: 'power2.inOut' });
+                gsap.to(hamLines[1], { opacity: 0, x: 8, duration: 0.2 });
+                gsap.to(hamLines[2], { rotation: -45, y: -6.5, width: '1.5rem', duration: 0.3, ease: 'power2.inOut' });
+            }
+            function closeMenu() {
+                menuOpen = false;
+                document.body.style.overflow = '';
+                gsap.to('.mob-link', { x: -24, opacity: 0, duration: 0.25, stagger: 0.04, ease: 'power2.in' });
+                gsap.to(mobileMenu, { opacity: 0, duration: 0.3, ease: 'power2.in', delay: 0.15, onComplete: () => gsap.set(mobileMenu, { pointerEvents: 'none' }) });
+                gsap.to(hamLines[0], { rotation: 0, y: 0, duration: 0.3, ease: 'power2.inOut' });
+                gsap.to(hamLines[1], { opacity: 1, x: 0, duration: 0.2, delay: 0.1 });
+                gsap.to(hamLines[2], { rotation: 0, y: 0, width: '1rem', duration: 0.3, ease: 'power2.inOut' });
+            }
+            menuBtn.addEventListener('click', () => menuOpen ? closeMenu() : openMenu());
+            menuClose.addEventListener('click', closeMenu);
+            document.querySelectorAll('.mob-link').forEach(link => {
+                if (link.tagName === 'A') link.addEventListener('click', closeMenu);
+            });
+
+            // ─── G-LINE MODAL ─────────────────────────────────────────────────
+            const glineModal = document.getElementById('gline-modal');
+            const glinePanel = document.getElementById('gline-panel');
+            function openGline() {
+                gsap.set(glineModal, { pointerEvents: 'auto' });
+                gsap.to(glineModal, { opacity: 1, duration: 0.3, ease: 'power2.out' });
+                gsap.fromTo(glinePanel, { scale: 0.94, y: 20 }, { scale: 1, y: 0, duration: 0.4, ease: 'back.out(1.4)' });
+                document.body.style.overflow = 'hidden';
+            }
+            function closeGline() {
+                gsap.to(glineModal, { opacity: 0, duration: 0.25, ease: 'power2.in', onComplete: () => {
+                    gsap.set(glineModal, { pointerEvents: 'none' });
+                    document.body.style.overflow = '';
+                }});
+            }
+            document.getElementById('gline-close').addEventListener('click', closeGline);
+            document.querySelectorAll('.gline-close-trigger').forEach(el => el.addEventListener('click', closeGline));
+            glineModal.addEventListener('click', (e) => { if (e.target === glineModal) closeGline(); });
+            document.querySelectorAll('.gline-trigger').forEach(el => el.addEventListener('click', (e) => { e.preventDefault(); openGline(); }));
+
+            document.getElementById('gline-form').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const btn = e.target.querySelector('.gline-submit-btn');
+                btn.querySelector('.gline-btn-text').classList.add('hidden');
+                btn.querySelector('.gline-btn-loading').classList.remove('hidden');
+                btn.disabled = true;
+                const payload = {
+                    name: document.getElementById('gline-your-name').value,
+                    referralName: document.getElementById('gline-who').value,
+                    relationship: document.getElementById('gline-relationship').value,
+                    urgency: document.getElementById('gline-urgency').value,
+                    situation: document.getElementById('gline-situation').value,
+                };
+                try { await fetch('/api/referral', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) }); } catch (_) {}
+                gsap.to('.gline-success', { y: '0%', duration: 0.8, ease: 'power4.out' });
+            });
+
+            // ─── PAGE ANIMATIONS ──────────────────────────────────────────────
+            gsap.utils.toArray('.reveal-el').forEach(el => {
+                gsap.fromTo(el, { opacity: 0, y: 30 }, {
+                    opacity: 1, y: 0, duration: 1, ease: 'power3.out',
+                    scrollTrigger: { trigger: el, start: 'top 88%' }
+                });
+            });
+
+            // Discipline rows
+            gsap.utils.toArray('.discipline-row').forEach((row, i) => {
+                gsap.to(row, {
+                    opacity: 1, duration: 0.7, ease: 'power2.out',
+                    scrollTrigger: { trigger: row, start: 'top 88%' },
+                    delay: (i % 2) * 0.1
+                });
+            });
+
+            // Session items
+            gsap.utils.toArray('.session-item').forEach((item, i) => {
+                gsap.fromTo(item, { opacity: 0, x: 30 }, {
+                    opacity: 1, x: 0, duration: 0.8, ease: 'power3.out',
+                    scrollTrigger: { trigger: item, start: 'top 85%' },
+                    delay: i * 0.1
+                });
+            });
+
+            // SOS items
+            gsap.utils.toArray('.sos-item').forEach((item, i) => {
+                gsap.to(item, {
+                    opacity: 1, duration: 0.8, ease: 'power2.out',
+                    scrollTrigger: { trigger: item, start: 'top 82%' },
+                    delay: i * 0.15
+                });
+            });
+
+            // Footer
+            gsap.to(".final-line", { x: "0%", duration: 1.5, ease: "power2.out", scrollTrigger: { trigger: "footer", start: "top 80%" } });
+            gsap.to(".footer-promise", { color: "#D4AF37", opacity: 1, duration: 1, scrollTrigger: { trigger: "footer", start: "top 60%" } });
+        });
+    </script>
+</body>
+</html>
