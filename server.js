@@ -89,6 +89,51 @@ app.post('/api/portal-login', (req, res) => {
     res.json({ success: true, tier, token });
 });
 
+// ─── GET /api/steps ──────────────────────────────────────────────────────────
+app.get('/api/steps', (req, res) => {
+    const steps = readJSON(path.join(DATA_DIR, 'steps.json'));
+    res.json({ steps });
+});
+
+// ─── POST /api/steps (admin only) ────────────────────────────────────────────
+app.post('/api/steps', (req, res) => {
+    const auth = req.headers['x-admin-key'];
+    if (auth !== process.env.ADMIN_KEY && process.env.NODE_ENV !== 'development') {
+        return res.status(403).json({ error: 'Forbidden.' });
+    }
+    const { location, city, area, steppers, status, startTime, endTime, purpose, outcome, coordinatedBy } = req.body;
+    const file = path.join(DATA_DIR, 'steps.json');
+    const steps = readJSON(file);
+    const newStep = {
+        id: Date.now(),
+        location, city, area,
+        steppers: parseInt(steppers) || 0,
+        status: status || 'upcoming',
+        startTime, endTime: endTime || null,
+        purpose, outcome: outcome || null,
+        coordinatedBy: coordinatedBy || 'SOS Team'
+    };
+    steps.push(newStep);
+    writeJSON(file, steps);
+    console.log(`[STEP] New step added: ${location} (${status})`);
+    res.json({ success: true, step: newStep });
+});
+
+// ─── PUT /api/steps/:id (admin only) ─────────────────────────────────────────
+app.put('/api/steps/:id', (req, res) => {
+    const auth = req.headers['x-admin-key'];
+    if (auth !== process.env.ADMIN_KEY && process.env.NODE_ENV !== 'development') {
+        return res.status(403).json({ error: 'Forbidden.' });
+    }
+    const file = path.join(DATA_DIR, 'steps.json');
+    const steps = readJSON(file);
+    const idx = steps.findIndex(s => String(s.id) === String(req.params.id));
+    if (idx === -1) return res.status(404).json({ error: 'Step not found.' });
+    steps[idx] = { ...steps[idx], ...req.body };
+    writeJSON(file, steps);
+    res.json({ success: true, step: steps[idx] });
+});
+
 // ─── GET /api/submissions (admin view) ───────────────────────────────────────
 app.get('/api/submissions', (req, res) => {
     const auth = req.headers['x-admin-key'];
